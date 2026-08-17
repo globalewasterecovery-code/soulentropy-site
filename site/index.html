@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <meta
+      name="description"
+      content="灵熵 · Qi——一个碳基与硅基的协作实验，目前正在内部测试中。"
+    />
+    <title>灵熵 · Qi</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0d0f;
+        --text: #f2f0e9;
+        --muted: #aaa99f;
+        --line: rgba(242, 240, 233, 0.16);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 50% 20%, rgba(160, 175, 161, 0.09), transparent 36rem),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      main {
+        width: min(44rem, calc(100% - 3rem));
+        min-height: 100vh;
+        margin: 0 auto;
+        display: grid;
+        align-content: center;
+        gap: 2.4rem;
+        padding: 5rem 0;
+      }
+
+      .mark {
+        width: 2.2rem;
+        height: 1px;
+        background: var(--text);
+        opacity: 0.55;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", "Noto Serif SC", serif;
+        font-size: clamp(3rem, 11vw, 6.6rem);
+        font-weight: 400;
+        letter-spacing: -0.045em;
+        line-height: 0.98;
+      }
+
+      .intro {
+        max-width: 34rem;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 2.3vw, 1.2rem);
+        line-height: 1.9;
+      }
+
+      .waitlist {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .waitlist span:last-child { color: var(--text); }
+
+      @media (max-width: 32rem) {
+        main { width: min(100% - 2rem, 44rem); }
+        .waitlist { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-hidden="true"></div>
+      <header>
+        <h1>灵熵 · Qi</h1>
+      </header>
+      <section aria-label="项目说明">
+        <p class="intro">这是一个碳基与硅基的协作实验，目前正在内部测试中</p>
+      </section>
+      <section class="waitlist" aria-label="联系与等候名单">
+        <span>联系入口 / 等候名单</span>
+        <span>即将开放</span>
+      </section>
+    </main>
+  </body>
+</html>
