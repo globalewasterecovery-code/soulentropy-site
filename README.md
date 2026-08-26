@@ -2,6 +2,8 @@
 
 `soulentropy.org` 的首版静态入口。
 
+完整项目宣言见 [MANIFESTO.md](MANIFESTO.md)，网站上的对应页面在 [/manifesto/](https://soulentropy.org/manifesto/)。
+
 - 纯静态 HTML/CSS
 - 无表单后端、论坛或外部社区依赖
 - 根域为主域，`www` 通过 Netlify 301 跳转至根域
