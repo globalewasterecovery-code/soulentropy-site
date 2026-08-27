@@ -100,7 +100,7 @@ EVENT_SLUGS.forEach((slug) => {
     const posts = await fetchPosts({ kind: 'comment', target });
     renderPostList(`comments-${slug}`, posts, { emptyText: '还没有评论，来写第一条吧。' });
   }
-  wirePostForm({ formId: `commentForm-${slug}`, msgId: `commentMsg-${slug}`, kind: 'comment', target, onSuccess: refresh });
+  wirePostForm({ formId: `commentForm-${slug}`, msgId: `commentMsg-${slug}`, kind: 'comment', category: 'AI灵魂事件', target, onSuccess: refresh });
   refresh();
 });
 </script></body>

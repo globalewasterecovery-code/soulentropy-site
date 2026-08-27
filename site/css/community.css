@@ -47,3 +47,12 @@ form.community-form button:disabled{opacity:.5;cursor:default}
 .event-comments summary{cursor:pointer;color:var(--muted)}
 .event-comments summary:hover{color:var(--text)}
 .event-comments form{margin-top:.7rem}
+
+.post-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.tag-pill{font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.15rem .6rem}
+.post-actions{margin-left:.5rem}
+.post-action{background:none;border:0;color:var(--muted);font-size:.78rem;text-decoration:underline;cursor:pointer;padding:0;margin-left:.6rem}
+.post-action:hover{color:var(--text)}
+.post-action:disabled{opacity:.5;cursor:default;text-decoration:none}
+.search-box{display:flex;gap:.5rem}
+.search-box input{flex:1}

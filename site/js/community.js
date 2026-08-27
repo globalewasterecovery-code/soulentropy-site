@@ -1,6 +1,10 @@
-// 灵熵 · Qi 轻社区 V1 共用逻辑。所有页面（首页/手记/留言板/资源交换/案例）共用同一套：
-// 登录态渲染、发帖（评论/留言/资源/案例统一走 posts 表）、拉取并渲染帖子列表。
+// 五站共享社区组件库 · community-core.js
+// 部署到每个站点时，只需要改下面这一行 SITE 常量，其余逻辑全部通用。
+// 依赖同一个 Supabase 项目里统一结构的 posts 表（见 supabase/003_shared_community.sql）：
+// site / kind / category / target / title / body / tags / status / cross_post_sites。
 import { supabase } from '/js/supabase-client.js';
+
+const SITE = 'soulentropy'; // <- 每个站点的 vendored 副本改这一行，比如 'soulentropy' / 'vietnamzichan'
 
 export function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({
@@ -42,9 +46,10 @@ export async function renderAuthState(containerId) {
   return session;
 }
 
-// 发一条帖子。kind: comment | board | resource_offer | resource_need | resource_trade | case
-// target: 评论时用来标记挂在哪个页面/文章上，比如 'home' 或 'journal:local-is-sovereignty'
-export async function submitPost({ kind, target = null, title = null, body }) {
+// 发一条帖子/回复。kind: post | comment | board | resource_offer | resource_need | resource_trade | case
+// category：该站自己的业务分类（比如 VietChipHub 用 'BUY'/'SELL'/'RFQ'，SoulEntropy 用 '讨论'/'案例'）。
+// target：挂载点，比如给某条帖子回复时传 `post:<id>`，给某个固定页面挂评论时传 'home' 之类的字符串。
+export async function submitPost({ kind, category = null, target = null, title = null, body, tags = [] }) {
   const session = await getSession();
   if (!session || !session.user) {
     throw new Error('NEED_LOGIN');
@@ -52,19 +57,40 @@ export async function submitPost({ kind, target = null, title = null, body }) {
   const displayName = (session.user.user_metadata && session.user.user_metadata.display_name) || session.user.email;
   const { data, error } = await supabase
     .from('posts')
-    .insert({ user_id: session.user.id, display_name: displayName, kind, target, title, body })
+    .insert({
+      user_id: session.user.id,
+      display_name: displayName,
+      site: SITE,
+      kind,
+      category,
+      target,
+      title,
+      body,
+      tags: (tags && tags.length) ? tags : [],
+    })
     .select()
     .single();
-  if (error) throw error;
+  if (error) {
+    if (String(error.message || '').includes('RATE_LIMITED')) throw new Error('发布太频繁，请稍后再试');
+    throw error;
+  }
   return data;
 }
 
-export async function fetchPosts({ kind, target = null, limit = 50 }) {
-  let query = supabase.from('posts').select('*').eq('kind', kind).order('created_at', { ascending: false }).limit(limit);
+export async function fetchPosts({ kind, category = null, target = null, tag = null, q = null, limit = 50 }) {
+  let query = supabase.from('posts').select('*').eq('site', SITE).eq('kind', kind).eq('status', 'active').order('created_at', { ascending: false }).limit(limit);
   if (target !== null) query = query.eq('target', target);
+  if (category !== null) query = query.eq('category', category);
+  if (tag !== null) query = query.contains('tags', [tag]);
+  if (q) query = query.or(`title.ilike.%${q}%,body.ilike.%${q}%`);
   const { data, error } = await query;
   if (error) throw error;
   return data || [];
+}
+
+export async function updatePost(id, body) {
+  const { error } = await supabase.from('posts').update({ body, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) throw error;
 }
 
 export async function deletePost(id) {
@@ -72,26 +98,66 @@ export async function deletePost(id) {
   if (error) throw error;
 }
 
-// 渲染一个通用留言/评论列表到指定容器（每条：昵称 + 时间 + 正文，标题可选）。
-export function renderPostList(containerId, posts, { emptyText = '还没有内容，来写第一条吧。', showTitle = false } = {}) {
+export async function reportPost(id, reason = 'user_reported') {
+  const session = await getSession();
+  if (!session || !session.user) throw new Error('NEED_LOGIN');
+  const { error } = await supabase.from('reports').insert({ post_id: id, reporter_user_id: session.user.id, reason });
+  if (error) throw error;
+}
+
+// 渲染一个通用留言/评论/帖子列表到指定容器。自带"编辑/删除"（本人）和"举报"（他人）按钮。
+export function renderPostList(containerId, posts, { emptyText = '还没有内容，来写第一条吧。', showTitle = false, actionable = true } = {}) {
   const el = document.getElementById(containerId);
   if (!el) return;
   if (!posts.length) {
     el.innerHTML = `<p class="empty">${escapeHtml(emptyText)}</p>`;
     return;
   }
-  el.innerHTML = posts.map((p) => `
-    <article class="post-item">
-      ${showTitle && p.title ? `<h3>${escapeHtml(p.title)}</h3>` : ''}
-      <p class="post-body">${escapeHtml(p.body)}</p>
-      <div class="post-meta">${escapeHtml(p.display_name)} · ${formatTime(p.created_at)}</div>
-    </article>
-  `).join('');
+  const render = (uid) => {
+    el.innerHTML = posts.map((p) => {
+      const mine = actionable && uid && p.user_id === uid;
+      const tagsHtml = (p.tags && p.tags.length) ? `<div class="post-tags">${p.tags.map((t) => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</div>` : '';
+      const actions = !actionable ? '' : (mine
+        ? `<button type="button" class="post-action" data-act="edit" data-id="${p.id}">编辑</button><button type="button" class="post-action" data-act="delete" data-id="${p.id}">删除</button>`
+        : `<button type="button" class="post-action" data-act="report" data-id="${p.id}">举报</button>`);
+      return `<article class="post-item" data-post-id="${p.id}">
+        ${showTitle && p.title ? `<h3>${escapeHtml(p.title)}</h3>` : ''}
+        <p class="post-body" data-body>${escapeHtml(p.body)}</p>
+        ${tagsHtml}
+        <div class="post-meta">${escapeHtml(p.display_name)} · ${formatTime(p.created_at)}${p.updated_at ? ' · 已编辑' : ''} <span class="post-actions">${actions}</span></div>
+      </article>`;
+    }).join('');
+    if (!actionable) return;
+    el.querySelectorAll('.post-action').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const act = btn.dataset.act;
+        const article = el.querySelector(`[data-post-id="${id}"]`);
+        if (act === 'delete') {
+          if (!confirm('确定删除这条内容？删除后无法恢复。')) return;
+          try { await deletePost(id); article.remove(); } catch (e) { alert('删除失败：' + (e && e.message ? e.message : e)); }
+        } else if (act === 'edit') {
+          const bodyEl = article.querySelector('[data-body]');
+          const current = (posts.find((p) => String(p.id) === String(id)) || {}).body || '';
+          const next = prompt('修改内容：', current);
+          if (next === null || !next.trim()) return;
+          try { await updatePost(id, next.trim()); bodyEl.textContent = next.trim(); } catch (e) { alert('修改失败：' + (e && e.message ? e.message : e)); }
+        } else if (act === 'report') {
+          if (!confirm('确定要举报这条内容给管理员吗？')) return;
+          try { await reportPost(id); btn.textContent = '已举报'; btn.disabled = true; } catch (e) {
+            if (e && e.message === 'NEED_LOGIN') alert('请先登录后再举报。');
+            else alert('举报失败：' + (e && e.message ? e.message : e));
+          }
+        }
+      });
+    });
+  };
+  getSession().then((session) => render(session && session.user ? session.user.id : null));
 }
 
-// 挂一个"发帖表单"的提交事件：formId 表单里必须有 id=postBody 的 textarea，
-// 可选 id=postTitle 的 input。提交成功后自动清空并调用 onSuccess 刷新列表。
-export function wirePostForm({ formId, msgId, kind, target = null, onSuccess }) {
+// 挂一个"发帖表单"的提交事件。formId 表单里必须有 id=postBody 的 textarea，
+// 可选 id=postTitle 的 input，可选 id=postTags 的 input（逗号分隔）。
+export function wirePostForm({ formId, msgId, kind, category = null, target = null, onSuccess }) {
   const form = document.getElementById(formId);
   if (!form) return;
   const msg = document.getElementById(msgId);
@@ -100,15 +166,20 @@ export function wirePostForm({ formId, msgId, kind, target = null, onSuccess }) 
     if (msg) { msg.textContent = ''; msg.className = 'msg'; }
     const bodyEl = form.querySelector('#postBody');
     const titleEl = form.querySelector('#postTitle');
+    const tagsEl = form.querySelector('#postTags');
+    const catEl = form.querySelector('#postCategory');
     const body = bodyEl ? bodyEl.value.trim() : '';
     const title = titleEl ? titleEl.value.trim() : null;
+    const tags = tagsEl ? tagsEl.value.split(',').map((t) => t.trim()).filter(Boolean) : [];
+    const cat = catEl ? catEl.value : category;
     if (!body) return;
     const btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
     try {
-      await submitPost({ kind, target, title: title || null, body });
+      await submitPost({ kind, category: cat, target, title: title || null, body, tags });
       if (bodyEl) bodyEl.value = '';
       if (titleEl) titleEl.value = '';
+      if (tagsEl) tagsEl.value = '';
       if (msg) { msg.textContent = '已发布。'; msg.className = 'msg ok'; }
       if (onSuccess) await onSuccess();
     } catch (err) {

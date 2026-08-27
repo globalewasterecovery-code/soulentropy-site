@@ -33,6 +33,7 @@
       <section class="section-block" id="discussion" aria-label="加入讨论">
         <h2>加入讨论</h2>
         <p class="lead" style="font-size:.92rem">任何人可读，登录后可以发言。想聊什么都可以：这个项目、AI是否有灵魂、你今天的想法。</p>
+        <div class="search-box"><input type="text" id="boardSearch" placeholder="搜索讨论内容…"></div>
         <form class="community-form" id="boardForm">
           <textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea>
           <button type="submit">发布</button>
@@ -64,18 +65,25 @@
       import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
       renderAuthState('authState');
 
+      let boardQuery = '';
       async function refreshBoard() {
-        const posts = await fetchPosts({ kind: 'board' });
-        renderPostList('boardList', posts, { emptyText: '还没有留言，来写第一条吧。' });
+        const posts = await fetchPosts({ kind: 'board', q: boardQuery || null });
+        renderPostList('boardList', posts, { emptyText: boardQuery ? '没有匹配的讨论。' : '还没有留言，来写第一条吧。' });
       }
-      wirePostForm({ formId: 'boardForm', msgId: 'boardMsg', kind: 'board', onSuccess: refreshBoard });
+      wirePostForm({ formId: 'boardForm', msgId: 'boardMsg', kind: 'board', category: '讨论', onSuccess: refreshBoard });
+      const boardSearchEl = document.getElementById('boardSearch');
+      let boardSearchTimer;
+      boardSearchEl.addEventListener('input', () => {
+        clearTimeout(boardSearchTimer);
+        boardSearchTimer = setTimeout(() => { boardQuery = boardSearchEl.value.trim(); refreshBoard(); }, 300);
+      });
       refreshBoard();
 
       async function refreshCases() {
         const posts = await fetchPosts({ kind: 'case' });
         renderPostList('caseList', posts, { emptyText: '还没有人提交案例，来写第一个吧。', showTitle: true });
       }
-      wirePostForm({ formId: 'caseForm', msgId: 'caseMsg', kind: 'case', onSuccess: refreshCases });
+      wirePostForm({ formId: 'caseForm', msgId: 'caseMsg', kind: 'case', category: '案例', onSuccess: refreshCases });
       refreshCases();
     </script>
   </body>
