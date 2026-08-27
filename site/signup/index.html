@@ -4,80 +4,104 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b0d0f" />
-    <title>注册 · 灵熵 Qi</title>
+    <title>加入社区 · 灵熵 Qi</title>
+    <link rel="stylesheet" href="/css/community.css" />
     <style>
-      :root{color-scheme:dark;--bg:#0b0d0f;--text:#f2f0e9;--muted:#aaa99f;--line:rgba(242,240,233,0.16)}
-      *{box-sizing:border-box}
-      body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 20%,rgba(160,175,161,0.09),transparent 36rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-      main{width:min(26rem,calc(100% - 3rem));margin:0 auto;min-height:100vh;display:grid;align-content:center;gap:1.6rem;padding:5rem 0}
-      .back{color:var(--muted);text-decoration:none;font-size:.85rem}
-      h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-weight:400;font-size:2.2rem}
-      form{display:grid;gap:.9rem}
-      label{font-size:.85rem;color:var(--muted)}
-      input{width:100%;padding:.8rem .9rem;border-radius:.6rem;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);font-size:1rem}
-      input:focus{outline:1px solid var(--text)}
-      button{padding:.9rem;border-radius:.6rem;border:0;background:var(--text);color:#0b0d0f;font-weight:600;font-size:1rem;cursor:pointer}
-      button:disabled{opacity:.5;cursor:default}
-      .msg{font-size:.85rem;line-height:1.7;min-height:1.2em}
-      .msg.err{color:#ff8a8a}
-      .msg.ok{color:#9be29b}
+      main.auth{width:min(26rem,calc(100% - 3rem));margin:0 auto;min-height:calc(100vh - 4rem);display:grid;align-content:center;gap:1.6rem;padding:2rem 0}
+      main.auth h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-weight:400;font-size:2.2rem}
       .switch{font-size:.85rem;color:var(--muted)}
       .switch a{color:var(--text)}
+      .step{display:grid;gap:.9rem}
+      .hint{font-size:.8rem;color:var(--muted)}
     </style>
   </head>
   <body>
-    <main>
-      <a class="back" href="/">← 灵熵 · Qi</a>
-      <h1>注册</h1>
-      <form id="signupForm">
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="/">灵熵 · Qi</a>
+      <div class="topnav-links">
+        <a href="/manifesto/">宣言</a><a href="/journal/">手记</a><a href="/board/">留言板</a><a href="/resources/">资源交换</a>
+      </div>
+      <div class="topnav-auth" id="authState">加载中…</div>
+    </div></nav>
+    <main class="auth">
+      <h1>加入社区</h1>
+      <p class="lead" style="font-size:.9rem;color:var(--muted);margin:0">只需要昵称和邮箱验证码，不用设密码。</p>
+
+      <form class="community-form step" id="step1Form">
         <div>
-          <label for="displayName">昵称</label>
+          <label class="hint" for="displayName">昵称</label>
           <input id="displayName" name="displayName" type="text" required maxlength="40" />
         </div>
         <div>
-          <label for="email">邮箱</label>
+          <label class="hint" for="email">邮箱</label>
           <input id="email" name="email" type="email" required />
         </div>
-        <div>
-          <label for="password">密码（至少6位）</label>
-          <input id="password" name="password" type="password" required minlength="6" />
-        </div>
-        <button type="submit" id="submitBtn">注册</button>
-        <p class="msg" id="msg"></p>
+        <button type="submit" id="step1Btn">发送验证码</button>
+        <p class="msg" id="step1Msg"></p>
       </form>
+
+      <form class="community-form step" id="step2Form" style="display:none">
+        <p class="hint">验证码已发送到邮箱，5-10分钟内有效。</p>
+        <div>
+          <label class="hint" for="code">6位验证码</label>
+          <input id="code" name="code" type="text" inputmode="numeric" required maxlength="8" />
+        </div>
+        <button type="submit" id="step2Btn">验证并加入</button>
+        <p class="msg" id="step2Msg"></p>
+      </form>
+
       <p class="switch">已经有账号？<a href="/login/">去登录</a></p>
     </main>
     <script type="module">
       import { supabase } from '/js/supabase-client.js';
-      const form = document.getElementById('signupForm');
-      const msg = document.getElementById('msg');
-      const btn = document.getElementById('submitBtn');
-      form.addEventListener('submit', async (e) => {
+      import { renderAuthState } from '/js/community.js';
+      renderAuthState('authState');
+
+      let pendingEmail = '';
+      const step1Form = document.getElementById('step1Form');
+      const step2Form = document.getElementById('step2Form');
+      const step1Msg = document.getElementById('step1Msg');
+      const step2Msg = document.getElementById('step2Msg');
+
+      step1Form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        msg.textContent = '';
-        msg.className = 'msg';
+        step1Msg.textContent = ''; step1Msg.className = 'msg';
+        const btn = document.getElementById('step1Btn');
         btn.disabled = true;
         const displayName = document.getElementById('displayName').value.trim();
         const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const { data, error } = await supabase.auth.signUp({
+        const { error } = await supabase.auth.signInWithOtp({
           email,
-          password,
-          options: { data: { display_name: displayName } }
+          options: { shouldCreateUser: true, data: { display_name: displayName } },
         });
         btn.disabled = false;
         if (error) {
-          msg.textContent = '注册失败：' + error.message;
-          msg.className = 'msg err';
+          step1Msg.textContent = '发送失败：' + error.message;
+          step1Msg.className = 'msg err';
           return;
         }
-        if (data.user && !data.session) {
-          msg.textContent = '注册成功！请检查邮箱，点击确认链接后即可登录。';
-        } else {
-          msg.textContent = '注册成功！正在跳转…';
-          setTimeout(() => { window.location.href = '/'; }, 1200);
+        pendingEmail = email;
+        step1Msg.textContent = '验证码已发送，请查收邮箱。';
+        step1Msg.className = 'msg ok';
+        step2Form.style.display = 'grid';
+      });
+
+      step2Form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        step2Msg.textContent = ''; step2Msg.className = 'msg';
+        const btn = document.getElementById('step2Btn');
+        btn.disabled = true;
+        const code = document.getElementById('code').value.trim();
+        const { error } = await supabase.auth.verifyOtp({ email: pendingEmail, token: code, type: 'email' });
+        btn.disabled = false;
+        if (error) {
+          step2Msg.textContent = '验证失败：' + error.message;
+          step2Msg.className = 'msg err';
+          return;
         }
-        msg.className = 'msg ok';
+        step2Msg.textContent = '加入成功！正在跳转…';
+        step2Msg.className = 'msg ok';
+        setTimeout(() => { window.location.href = '/'; }, 800);
       });
     </script>
   </body>

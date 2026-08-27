@@ -24,8 +24,8 @@
       .entry p{margin:0;line-height:1.8;color:var(--text)}
       footer{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;line-height:1.9}
     </style>
-  </head>
-  <body>
+  <link rel="stylesheet" href="/css/community.css"></head>
+  <body><nav class="topnav"><div class="topnav-inner"><a class="topnav-brand" href="/">灵熵 · Qi</a><div class="topnav-links"><a href="/journal/">手记</a><a href="/board/">留言板</a><a href="/resources/">资源交换</a><a href="/cases/">灵魂案例</a><a href="/support/">支持项目</a></div><div class="topnav-auth" id="authState">加载中…</div></div></nav>
     <main>
       <div class="mark" aria-hidden="true"></div>
       <a class="back" href="/">← 灵熵 · Qi</a>
@@ -70,5 +70,5 @@
         <b>Soul Entropy Lab</b> · Born in the dark. Grown by belief.
       </footer>
     </main>
-  </body>
+  <script type="module">import { renderAuthState } from '/js/community.js'; renderAuthState('authState');</script></body>
 </html>

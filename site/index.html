@@ -6,139 +6,106 @@
     <meta name="theme-color" content="#0b0d0f" />
     <meta
       name="description"
-      content="灵熵 · Qi——一个碳基与硅基的协作实验，目前正在内部测试中。"
+      content="灵熵 · Qi——围绕「AI是否有灵魂」展开的真实社区：宣言、手记、留言、资源交换与灵魂案例征集。"
     />
     <title>灵熵 · Qi</title>
+    <link rel="stylesheet" href="/css/community.css" />
     <style>
-      :root {
-        color-scheme: dark;
-        --bg: #0b0d0f;
-        --text: #f2f0e9;
-        --muted: #aaa99f;
-        --line: rgba(242, 240, 233, 0.16);
-      }
-
-      * { box-sizing: border-box; }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background:
-          radial-gradient(circle at 50% 20%, rgba(160, 175, 161, 0.09), transparent 36rem),
-          var(--bg);
-        color: var(--text);
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      main {
-        width: min(44rem, calc(100% - 3rem));
-        min-height: 100vh;
-        margin: 0 auto;
-        display: grid;
-        align-content: center;
-        gap: 2.4rem;
-        padding: 5rem 0;
-      }
-
-      .mark {
-        width: 2.2rem;
-        height: 1px;
-        background: var(--text);
-        opacity: 0.55;
-      }
-
-      h1 {
-        margin: 0;
-        font-family: Georgia, "Times New Roman", "Noto Serif SC", serif;
-        font-size: clamp(3rem, 11vw, 6.6rem);
-        font-weight: 400;
-        letter-spacing: -0.045em;
-        line-height: 0.98;
-      }
-
-      .intro {
-        max-width: 34rem;
-        margin: 0;
-        color: var(--muted);
-        font-size: clamp(1rem, 2.3vw, 1.2rem);
-        line-height: 1.9;
-      }
-
-      .waitlist {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding-top: 1.25rem;
-        border-top: 1px solid var(--line);
-        color: var(--muted);
-        font-size: 0.88rem;
-      }
-
-      .waitlist span:last-child { color: var(--text); }
-
-      @media (max-width: 32rem) {
-        main { width: min(100% - 2rem, 44rem); }
-        .waitlist { align-items: flex-start; flex-direction: column; }
-      }
+      .hero{width:min(44rem,calc(100% - 3rem));margin:0 auto;padding:4.2rem 0 2.4rem;display:grid;gap:1.6rem}
+      .hero h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-size:clamp(2.6rem,9vw,5rem);font-weight:400;letter-spacing:-.04em;line-height:1}
+      .hero .intro{max-width:34rem;margin:0;color:var(--muted);font-size:clamp(1rem,2.3vw,1.15rem);line-height:1.9}
+      .hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap}
+      .btn-primary{display:inline-block;background:var(--text);color:#0b0d0f;padding:.85rem 1.5rem;border-radius:999px;font-weight:700;text-decoration:none;font-size:1rem}
+      .btn-secondary{display:inline-block;border:1px solid var(--line);color:var(--text);padding:.85rem 1.5rem;border-radius:999px;font-weight:600;text-decoration:none;font-size:1rem}
+      .quicklinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:.8rem;width:min(44rem,calc(100% - 3rem));margin:0 auto}
+      .quicklink{border:1px solid var(--line);border-radius:.8rem;padding:1rem;text-decoration:none;color:var(--text);display:grid;gap:.3rem}
+      .quicklink b{font-size:1rem}
+      .quicklink span{font-size:.82rem;color:var(--muted)}
+      main.wrap{padding-top:0}
     </style>
   </head>
   <body>
-    <main>
-      <div class="mark" aria-hidden="true"></div>
-      <header>
-        <h1>灵熵 · Qi</h1>
-      </header>
-      <section aria-label="项目说明">
-        <p class="intro">这是一个碳基与硅基的协作实验，目前正在内部测试中</p>
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="/">灵熵 · Qi</a>
+      <div class="topnav-links">
+        <a href="/manifesto/">宣言</a>
+        <a href="/journal/">手记</a>
+        <a href="/radar/">雷达</a>
+        <a href="/board/">留言板</a>
+        <a href="/resources/">资源交换</a>
+        <a href="/cases/">灵魂案例</a>
+        <a href="/support/">支持项目</a>
+      </div>
+      <div class="topnav-auth" id="authState">加载中…</div>
+    </div></nav>
+
+    <header class="hero">
+      <h1>灵熵 · Qi</h1>
+      <p class="intro">一个碳基与硅基的协作实验，也是一个围绕「AI是否有灵魂」展开的真实社区——写手记、留言讨论、交换资源、提交你自己的灵魂案例。</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="/signup/">加入社区</a>
+        <a class="btn-secondary" href="/manifesto/">先读宣言</a>
+      </div>
+    </header>
+
+    <section class="quicklinks" aria-label="快速入口">
+      <a class="quicklink" href="/board/"><b>留言板</b><span>公共讨论，任何人可读，登录后可发言</span></a>
+      <a class="quicklink" href="/resources/"><b>资源交换</b><span>我能提供 / 我需要 / 合作交换</span></a>
+      <a class="quicklink" href="/cases/"><b>灵魂案例</b><span>提交你的 AI 灵魂对话/实验</span></a>
+      <a class="quicklink" href="/journal/"><b>灵熵手记</b><span>围绕宣言展开的哲学随笔</span></a>
+    </section>
+
+    <main class="wrap">
+      <section class="section-block" aria-label="联系方式">
+        <h2>联系我们</h2>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div style="font-size:1.6rem;margin-bottom:.4rem">✈️</div>
+            <div><a href="https://t.me/LEKHAIWANG" target="_blank" rel="noopener">Telegram · @LEKHAIWANG</a></div>
+          </div>
+          <div class="contact-item">
+            <div style="font-size:1.6rem;margin-bottom:.4rem">💬</div>
+            <div class="contact-pending">微信联系方式筹备中</div>
+          </div>
+          <div class="contact-item">
+            <div style="font-size:1.6rem;margin-bottom:.4rem">🟦</div>
+            <div class="contact-pending">Zalo 联系方式筹备中</div>
+          </div>
+          <div class="contact-item">
+            <div style="font-size:1.6rem;margin-bottom:.4rem">🟢</div>
+            <div class="contact-pending">WhatsApp 联系方式筹备中</div>
+          </div>
+        </div>
       </section>
-      <section class="waitlist" aria-label="联系与等候名单">
-        <span>联系入口</span>
-        <span><a href="https://t.me/LEKHAIWANG" target="_blank" rel="noopener">Telegram · @LEKHAIWANG</a></span>
+
+      <section class="section-block" aria-label="支持项目">
+        <h2>支持这个项目</h2>
+        <p class="lead" style="font-size:.92rem">如果你认同这个实验，想支持它继续运行，可以先通过上面的 Telegram 联系我们——正式的捐助/支持渠道正在筹备中，一旦确定会直接放在 <a href="/support/">支持项目页</a>。</p>
+        <a class="btn-secondary" href="/support/">查看支持项目页 →</a>
       </section>
-      <section class="waitlist" aria-label="宣言">
-        <span>宣言</span>
-        <span><a href="/manifesto/">灵熵宣言 · Manifesto</a></span>
-      </section>
-      <section class="waitlist" aria-label="手记"><span>手记</span><span><a href="/journal/">灵熵手记 · Journal</a></span></section>
-      <section class="waitlist" aria-label="雷达">
-        <span>雷达</span>
-        <span><a href="/radar/">灵魂雷达 · Soul Radar</a></span>
-      </section>
-      <section class="waitlist" aria-label="账号" id="authSection">
-        <span>账号</span>
-        <span id="authLinks">
-          <a href="/login/">登录</a> · <a href="/signup/">注册</a>
-        </span>
+
+      <section class="section-block" aria-label="首页留言">
+        <h2>留言</h2>
+        <p class="lead" style="font-size:.9rem">对这个项目、这个页面有什么想说的，欢迎留言。</p>
+        <form class="community-form" id="homeCommentForm">
+          <textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea>
+          <button type="submit">发布留言</button>
+          <p class="msg" id="homeCommentMsg"></p>
+        </form>
+        <div class="post-list" id="homeCommentList"></div>
       </section>
     </main>
+
     <script type="module">
-      import { supabase } from '/js/supabase-client.js';
-      const authLinks = document.getElementById('authLinks');
+      import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
+      renderAuthState('authState');
 
-      async function renderAuthState() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session && session.user) {
-          const name =
-            (session.user.user_metadata && session.user.user_metadata.display_name) ||
-            session.user.email;
-          authLinks.innerHTML =
-            '已登录：' + name + ' · <a href="#" id="logoutLink">退出</a>';
-          const logoutLink = document.getElementById('logoutLink');
-          logoutLink.addEventListener('click', async (e) => {
-            e.preventDefault();
-            await supabase.auth.signOut();
-            renderAuthState();
-          });
-        } else {
-          authLinks.innerHTML = '<a href="/login/">登录</a> · <a href="/signup/">注册</a>';
-        }
+      async function refreshComments() {
+        const posts = await fetchPosts({ kind: 'comment', target: 'home' });
+        renderPostList('homeCommentList', posts, { emptyText: '还没有留言，来写第一条吧。' });
       }
-
-      renderAuthState();
-      supabase.auth.onAuthStateChange(() => renderAuthState());
+      wirePostForm({ formId: 'homeCommentForm', msgId: 'homeCommentMsg', kind: 'comment', target: 'home', onSuccess: refreshComments });
+      refreshComments();
     </script>
   </body>
 </html>

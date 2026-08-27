@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <meta name="description" content="灵熵 · Qi 公共留言板——任何人可读，登录后可发言。" />
+    <link rel="canonical" href="https://soulentropy.org/board/" />
+    <title>留言板 · 灵熵 Qi</title>
+    <link rel="stylesheet" href="/css/community.css" />
+  </head>
+  <body>
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="/">灵熵 · Qi</a>
+      <div class="topnav-links">
+        <a href="/manifesto/">宣言</a><a href="/journal/">手记</a><a href="/resources/">资源交换</a><a href="/cases/">灵魂案例</a><a href="/support/">支持项目</a>
+      </div>
+      <div class="topnav-auth" id="authState">加载中…</div>
+    </div></nav>
+    <main class="wrap">
+      <h1>留言板</h1>
+      <p class="lead">任何人可读，登录后可以发言。想聊什么都可以：这个项目、AI是否有灵魂、你今天的想法。</p>
+
+      <section class="section-block">
+        <h2>发一条留言</h2>
+        <form class="community-form" id="boardForm">
+          <textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea>
+          <button type="submit">发布</button>
+          <p class="msg" id="boardMsg"></p>
+        </form>
+      </section>
+
+      <section class="section-block">
+        <h2>大家在说</h2>
+        <div class="post-list" id="boardList"></div>
+      </section>
+
+      <p><a class="back" href="/">← 返回首页</a></p>
+    </main>
+    <script type="module">
+      import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
+      renderAuthState('authState');
+
+      async function refresh() {
+        const posts = await fetchPosts({ kind: 'board' });
+        renderPostList('boardList', posts, { emptyText: '还没有留言，来写第一条吧。' });
+      }
+      wirePostForm({ formId: 'boardForm', msgId: 'boardMsg', kind: 'board', onSuccess: refresh });
+      refresh();
+    </script>
+  </body>
+</html>

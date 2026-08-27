@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <meta name="description" content="灵熵 · Qi 资源交换：我能提供 / 我需要 / 合作交换。" />
+    <link rel="canonical" href="https://soulentropy.org/resources/" />
+    <title>资源交换 · 灵熵 Qi</title>
+    <link rel="stylesheet" href="/css/community.css" />
+  </head>
+  <body>
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="/">灵熵 · Qi</a>
+      <div class="topnav-links">
+        <a href="/manifesto/">宣言</a><a href="/journal/">手记</a><a href="/board/">留言板</a><a href="/cases/">灵魂案例</a><a href="/support/">支持项目</a>
+      </div>
+      <div class="topnav-auth" id="authState">加载中…</div>
+    </div></nav>
+    <main class="wrap">
+      <h1>资源交换</h1>
+      <p class="lead">算力、模型、数据、时间、经验……你能提供什么，或者需要什么，都可以发在这里，大家自行私下联系对接。</p>
+
+      <section class="section-block">
+        <h2>发布一条</h2>
+        <form class="community-form" id="resourceForm">
+          <select id="resourceKind" required>
+            <option value="resource_offer">我能提供</option>
+            <option value="resource_need">我需要</option>
+            <option value="resource_trade">合作交换</option>
+          </select>
+          <input id="postTitle" type="text" placeholder="一句话标题，比如「提供本地4090算力」" required maxlength="80" />
+          <textarea id="postBody" placeholder="具体说明 + 怎么联系你（比如 Telegram/邮箱）" required maxlength="2000"></textarea>
+          <button type="submit">发布</button>
+          <p class="msg" id="resourceMsg"></p>
+        </form>
+      </section>
+
+      <section class="section-block">
+        <h2>浏览</h2>
+        <div class="tabbar" id="resourceTabs">
+          <button data-kind="resource_offer" class="active">我能提供</button>
+          <button data-kind="resource_need">我需要</button>
+          <button data-kind="resource_trade">合作交换</button>
+        </div>
+        <div class="post-list" id="resourceList"></div>
+      </section>
+
+      <p><a class="back" href="/">← 返回首页</a></p>
+    </main>
+    <script type="module">
+      import { renderAuthState, fetchPosts, renderPostList, submitPost } from '/js/community.js';
+      renderAuthState('authState');
+
+      let currentKind = 'resource_offer';
+
+      async function refresh() {
+        const posts = await fetchPosts({ kind: currentKind });
+        renderPostList('resourceList', posts, { emptyText: '这个分类下还没有内容。', showTitle: true });
+      }
+
+      document.getElementById('resourceTabs').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-kind]');
+        if (!btn) return;
+        currentKind = btn.dataset.kind;
+        document.querySelectorAll('#resourceTabs button').forEach((b) => b.classList.toggle('active', b === btn));
+        refresh();
+      });
+
+      const form = document.getElementById('resourceForm');
+      const msg = document.getElementById('resourceMsg');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = ''; msg.className = 'msg';
+        const kind = document.getElementById('resourceKind').value;
+        const title = document.getElementById('postTitle').value.trim();
+        const body = document.getElementById('postBody').value.trim();
+        if (!title || !body) return;
+        const btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        try {
+          await submitPost({ kind, title, body });
+          document.getElementById('postTitle').value = '';
+          document.getElementById('postBody').value = '';
+          msg.textContent = '已发布。';
+          msg.className = 'msg ok';
+          if (kind === currentKind) refresh();
+        } catch (err) {
+          if (err && err.message === 'NEED_LOGIN') {
+            msg.textContent = '请先登录或注册后再发布。';
+          } else {
+            msg.textContent = '发布失败：' + (err && err.message ? err.message : String(err));
+          }
+          msg.className = 'msg err';
+        } finally {
+          btn.disabled = false;
+        }
+      });
+
+      refresh();
+    </script>
+  </body>
+</html>
