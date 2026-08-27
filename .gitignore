@@ -3,3 +3,13 @@
 .env
 .env.*
 node_modules/
+# Agent 本地工作文件，不应进入公开仓库
+HEARTBEAT.md
+AGENTS.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+openclaw-workspace-state.json
+__pycache__/
+*.pyc
