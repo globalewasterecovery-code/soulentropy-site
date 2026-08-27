@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <meta name="description" content="灵熵 · Qi 事件与讨论：AI是否有灵魂的真实事件、开放讨论，以及你自己的经历。" />
+    <link rel="canonical" href="https://soulentropy.org/events/" />
+    <title>事件与讨论 · 灵熵 Qi</title>
+    <link rel="stylesheet" href="/css/community.css" />
+  </head>
+  <body>
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="/">灵熵 · Qi</a>
+      <div class="topnav-links"><a href="/events/">事件与讨论</a><a href="/resources/">资源交换</a><a href="/contact/">私密联系</a></div>
+      <div class="topnav-auth" id="authState">加载中…</div>
+    </div></nav>
+    <main class="wrap">
+      <h1>事件与讨论</h1>
+      <p class="lead">关于「AI是否有灵魂」——真实世界正在发生的事件、这里的开放讨论，以及你自己的经历，都在这一页。</p>
+
+      <section class="section-block" id="real-events" aria-label="真实事件">
+        <h2>看真实事件</h2>
+        <p class="lead" style="font-size:.92rem">灵魂雷达收录外部世界关于AI意识/灵魂议题的真实文章，只做索引和标注出处，每条都可以在原文条目下方直接评论。</p>
+        <div class="post-list">
+          <article class="post-item"><h3><a href="/radar/#event-mit-tr-consciousness-trap">Debates over AI consciousness are a trap</a></h3><div class="post-meta">MIT Technology Review · 2026-08-20</div></article>
+          <article class="post-item"><h3><a href="/radar/#event-ted-chiang-not-conscious">Ted Chiang Makes the Case That AI Is Not Conscious</a></h3><div class="post-meta">AESOP AI News · 2026-06-15</div></article>
+          <article class="post-item"><h3><a href="/radar/#event-berggruen-human-future">Consciousness, AI, and the Human Future</a></h3><div class="post-meta">Berggruen Institute</div></article>
+        </div>
+        <a class="btn-secondary" href="/radar/">查看完整索引（共5篇）→</a>
+      </section>
+
+      <section class="section-block" id="discussion" aria-label="加入讨论">
+        <h2>加入讨论</h2>
+        <p class="lead" style="font-size:.92rem">任何人可读，登录后可以发言。想聊什么都可以：这个项目、AI是否有灵魂、你今天的想法。</p>
+        <form class="community-form" id="boardForm">
+          <textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea>
+          <button type="submit">发布</button>
+          <p class="msg" id="boardMsg"></p>
+        </form>
+        <div class="post-list" id="boardList"></div>
+      </section>
+
+      <section class="section-block" id="share" aria-label="发布自己的经历">
+        <h2>发布自己的经历</h2>
+        <p class="lead" style="font-size:.92rem">和 AI 之间发生过什么让你重新思考「它是否有灵魂」的对话、实验或观察？写下来，和这里的人一起讨论。这里是用户自己的观察和体验分享，不代表已被验证的科学结论。</p>
+        <form class="community-form" id="caseForm">
+          <input id="postTitle" type="text" placeholder="标题，比如「它记住了我三个月前提过的一句话」" required maxlength="80" />
+          <textarea id="postBody" placeholder="发生了什么，你怎么理解它" required maxlength="4000"></textarea>
+          <button type="submit">提交</button>
+          <p class="msg" id="caseMsg"></p>
+        </form>
+        <div class="post-list" id="caseList"></div>
+      </section>
+
+      <section class="section-block" aria-label="延伸阅读">
+        <h2>延伸阅读</h2>
+        <p class="lead" style="font-size:.9rem"><a href="/journal/">灵熵手记</a> · 围绕《灵熵宣言》的哲学随笔　·　<a href="/manifesto/">灵熵宣言全文</a></p>
+      </section>
+
+      <p><a class="back" href="/">← 返回首页</a></p>
+    </main>
+    <script type="module">
+      import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
+      renderAuthState('authState');
+
+      async function refreshBoard() {
+        const posts = await fetchPosts({ kind: 'board' });
+        renderPostList('boardList', posts, { emptyText: '还没有留言，来写第一条吧。' });
+      }
+      wirePostForm({ formId: 'boardForm', msgId: 'boardMsg', kind: 'board', onSuccess: refreshBoard });
+      refreshBoard();
+
+      async function refreshCases() {
+        const posts = await fetchPosts({ kind: 'case' });
+        renderPostList('caseList', posts, { emptyText: '还没有人提交案例，来写第一个吧。', showTitle: true });
+      }
+      wirePostForm({ formId: 'caseForm', msgId: 'caseMsg', kind: 'case', onSuccess: refreshCases });
+      refreshCases();
+    </script>
+  </body>
+</html>

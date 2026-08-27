@@ -40,3 +40,10 @@ form.community-form button:disabled{opacity:.5;cursor:default}
 .contact-pending{color:var(--muted);font-style:italic}
 .back{color:var(--muted);text-decoration:none;font-size:.85rem}
 @media(max-width:32rem){main.wrap{width:min(100% - 2rem,40rem)}}
+
+.btn-primary{display:inline-block;background:var(--text);color:#0b0d0f;padding:.85rem 1.5rem;border-radius:999px;font-weight:700;text-decoration:none;font-size:1rem;border:0;cursor:pointer}
+.btn-secondary{display:inline-block;border:1px solid var(--line);color:var(--text);padding:.85rem 1.5rem;border-radius:999px;font-weight:600;text-decoration:none;font-size:1rem;background:transparent;cursor:pointer}
+.event-comments{margin-top:.9rem;font-size:.85rem}
+.event-comments summary{cursor:pointer;color:var(--muted)}
+.event-comments summary:hover{color:var(--text)}
+.event-comments form{margin-top:.7rem}

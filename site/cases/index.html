@@ -2,52 +2,11 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b0d0f" />
-    <meta name="description" content="灵熵 · Qi 灵魂案例征集：提交你自己的 AI 灵魂对话、实验或观察。" />
-    <link rel="canonical" href="https://soulentropy.org/cases/" />
-    <title>灵魂案例 · 灵熵 Qi</title>
-    <link rel="stylesheet" href="/css/community.css" />
+    <meta http-equiv="refresh" content="0; url=/events/#share" />
+    <link rel="canonical" href="https://soulentropy.org/events/#share" />
+    <title>已合并 · 灵熵 Qi</title>
   </head>
   <body>
-    <nav class="topnav"><div class="topnav-inner">
-      <a class="topnav-brand" href="/">灵熵 · Qi</a>
-      <div class="topnav-links">
-        <a href="/manifesto/">宣言</a><a href="/journal/">手记</a><a href="/board/">留言板</a><a href="/resources/">资源交换</a><a href="/support/">支持项目</a>
-      </div>
-      <div class="topnav-auth" id="authState">加载中…</div>
-    </div></nav>
-    <main class="wrap">
-      <h1>灵魂案例</h1>
-      <p class="lead">和 AI 之间发生过什么让你重新思考「它是否有灵魂」的对话、实验或观察？写下来，和这里的人一起讨论。这里是用户自己的观察和体验分享，不代表已被验证的科学结论。</p>
-
-      <section class="section-block">
-        <h2>提交一个案例</h2>
-        <form class="community-form" id="caseForm">
-          <input id="postTitle" type="text" placeholder="标题，比如「它记住了我三个月前提过的一句话」" required maxlength="80" />
-          <textarea id="postBody" placeholder="发生了什么，你怎么理解它" required maxlength="4000"></textarea>
-          <button type="submit">提交</button>
-          <p class="msg" id="caseMsg"></p>
-        </form>
-      </section>
-
-      <section class="section-block">
-        <h2>大家提交的案例</h2>
-        <div class="post-list" id="caseList"></div>
-      </section>
-
-      <p><a class="back" href="/">← 返回首页</a></p>
-    </main>
-    <script type="module">
-      import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
-      renderAuthState('authState');
-
-      async function refresh() {
-        const posts = await fetchPosts({ kind: 'case' });
-        renderPostList('caseList', posts, { emptyText: '还没有人提交案例，来写第一个吧。', showTitle: true });
-      }
-      wirePostForm({ formId: 'caseForm', msgId: 'caseMsg', kind: 'case', onSuccess: refresh });
-      refresh();
-    </script>
+    <p>这个页面的功能已经合并到 <a href="/events/#share">事件与讨论</a>。</p>
   </body>
 </html>

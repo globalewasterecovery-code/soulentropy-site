@@ -18,14 +18,20 @@
   <body>
     <nav class="topnav"><div class="topnav-inner">
       <a class="topnav-brand" href="/">灵熵 · Qi</a>
-      <div class="topnav-links">
-        <a href="/manifesto/">宣言</a><a href="/journal/">手记</a><a href="/board/">留言板</a><a href="/resources/">资源交换</a>
-      </div>
+      <div class="topnav-links"><a href="/events/">事件与讨论</a><a href="/resources/">资源交换</a><a href="/contact/">私密联系</a></div>
       <div class="topnav-auth" id="authState">加载中…</div>
     </div></nav>
     <main class="auth">
       <h1>加入社区</h1>
       <p class="lead" style="font-size:.9rem;color:var(--muted);margin:0">只需要昵称和邮箱验证码，不用设密码。</p>
+
+      <div class="community-form" style="gap:.6rem">
+        <button type="button" id="oauthGoogle">使用 Google 继续</button>
+        <button type="button" id="oauthApple">使用 Apple 继续</button>
+        <button type="button" id="oauthFacebook">使用 Facebook 继续</button>
+        <p class="msg" id="oauthMsg"></p>
+      </div>
+      <p class="hint" style="text-align:center">或使用邮箱验证码（备用）</p>
 
       <form class="community-form step" id="step1Form">
         <div>
@@ -56,6 +62,16 @@
       import { supabase } from '/js/supabase-client.js';
       import { renderAuthState } from '/js/community.js';
       renderAuthState('authState');
+      document.getElementById('oauthGoogle').addEventListener('click', () => oauthSignIn('google'));
+      document.getElementById('oauthApple').addEventListener('click', () => oauthSignIn('apple'));
+      document.getElementById('oauthFacebook').addEventListener('click', () => oauthSignIn('facebook'));
+      async function oauthSignIn(provider) {
+        const msg = document.getElementById('oauthMsg');
+        msg.textContent = ''; msg.className = 'msg';
+        const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin + '/' } });
+        if (error) { msg.textContent = '登录失败：' + error.message; msg.className = 'msg err'; }
+      }
+
 
       let pendingEmail = '';
       const step1Form = document.getElementById('step1Form');
