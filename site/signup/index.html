@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <title>注册 · 灵熵 Qi</title>
+    <style>
+      :root{color-scheme:dark;--bg:#0b0d0f;--text:#f2f0e9;--muted:#aaa99f;--line:rgba(242,240,233,0.16)}
+      *{box-sizing:border-box}
+      body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 20%,rgba(160,175,161,0.09),transparent 36rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+      main{width:min(26rem,calc(100% - 3rem));margin:0 auto;min-height:100vh;display:grid;align-content:center;gap:1.6rem;padding:5rem 0}
+      .back{color:var(--muted);text-decoration:none;font-size:.85rem}
+      h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-weight:400;font-size:2.2rem}
+      form{display:grid;gap:.9rem}
+      label{font-size:.85rem;color:var(--muted)}
+      input{width:100%;padding:.8rem .9rem;border-radius:.6rem;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);font-size:1rem}
+      input:focus{outline:1px solid var(--text)}
+      button{padding:.9rem;border-radius:.6rem;border:0;background:var(--text);color:#0b0d0f;font-weight:600;font-size:1rem;cursor:pointer}
+      button:disabled{opacity:.5;cursor:default}
+      .msg{font-size:.85rem;line-height:1.7;min-height:1.2em}
+      .msg.err{color:#ff8a8a}
+      .msg.ok{color:#9be29b}
+      .switch{font-size:.85rem;color:var(--muted)}
+      .switch a{color:var(--text)}
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/">← 灵熵 · Qi</a>
+      <h1>注册</h1>
+      <form id="signupForm">
+        <div>
+          <label for="displayName">昵称</label>
+          <input id="displayName" name="displayName" type="text" required maxlength="40" />
+        </div>
+        <div>
+          <label for="email">邮箱</label>
+          <input id="email" name="email" type="email" required />
+        </div>
+        <div>
+          <label for="password">密码（至少6位）</label>
+          <input id="password" name="password" type="password" required minlength="6" />
+        </div>
+        <button type="submit" id="submitBtn">注册</button>
+        <p class="msg" id="msg"></p>
+      </form>
+      <p class="switch">已经有账号？<a href="/login/">去登录</a></p>
+    </main>
+    <script type="module">
+      import { supabase } from '/js/supabase-client.js';
+      const form = document.getElementById('signupForm');
+      const msg = document.getElementById('msg');
+      const btn = document.getElementById('submitBtn');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = '';
+        msg.className = 'msg';
+        btn.disabled = true;
+        const displayName = document.getElementById('displayName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { display_name: displayName } }
+        });
+        btn.disabled = false;
+        if (error) {
+          msg.textContent = '注册失败：' + error.message;
+          msg.className = 'msg err';
+          return;
+        }
+        if (data.user && !data.session) {
+          msg.textContent = '注册成功！请检查邮箱，点击确认链接后即可登录。';
+        } else {
+          msg.textContent = '注册成功！正在跳转…';
+          setTimeout(() => { window.location.href = '/'; }, 1200);
+        }
+        msg.className = 'msg ok';
+      });
+    </script>
+  </body>
+</html>

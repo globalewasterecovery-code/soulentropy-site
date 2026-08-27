@@ -106,6 +106,38 @@
         <span>雷达</span>
         <span><a href="/radar/">灵魂雷达 · Soul Radar</a></span>
       </section>
+      <section class="waitlist" aria-label="账号" id="authSection">
+        <span>账号</span>
+        <span id="authLinks">
+          <a href="/login/">登录</a> · <a href="/signup/">注册</a>
+        </span>
+      </section>
     </main>
+    <script type="module">
+      import { supabase } from '/js/supabase-client.js';
+      const authLinks = document.getElementById('authLinks');
+
+      async function renderAuthState() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session && session.user) {
+          const name =
+            (session.user.user_metadata && session.user.user_metadata.display_name) ||
+            session.user.email;
+          authLinks.innerHTML =
+            '已登录：' + name + ' · <a href="#" id="logoutLink">退出</a>';
+          const logoutLink = document.getElementById('logoutLink');
+          logoutLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await supabase.auth.signOut();
+            renderAuthState();
+          });
+        } else {
+          authLinks.innerHTML = '<a href="/login/">登录</a> · <a href="/signup/">注册</a>';
+        }
+      }
+
+      renderAuthState();
+      supabase.auth.onAuthStateChange(() => renderAuthState());
+    </script>
   </body>
 </html>
