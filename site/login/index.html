@@ -57,7 +57,9 @@
     <script type="module">
       import { supabase } from '/js/supabase-client.js';
       import { renderAuthState } from '/js/community.js';
-      renderAuthState('authState');
+      renderAuthState('authState').then((session) => {
+        if (session && session.user) { window.location.replace('/'); }
+      });
       document.getElementById('oauthGoogle').addEventListener('click', () => oauthSignIn('google'));
       document.getElementById('oauthApple').addEventListener('click', () => oauthSignIn('apple'));
       document.getElementById('oauthFacebook').addEventListener('click', () => oauthSignIn('facebook'));
