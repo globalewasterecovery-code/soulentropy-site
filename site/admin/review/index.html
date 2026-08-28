@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>内容审核后台 · 灵熵 Qi</title>
+    <link rel="stylesheet" href="/css/community.css" />
+    <style>
+      main.review{width:min(60rem,calc(100% - 3rem));margin:0 auto;min-height:calc(100vh - 4rem);padding:2rem 0;display:grid;gap:1.2rem}
+      main.review h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-weight:400;font-size:2rem}
+      .review-item{border:1px solid var(--border,#333);border-radius:.6rem;padding:1rem;display:grid;gap:.5rem}
+      .review-meta{font-size:.8rem;color:var(--muted,#888)}
+      .review-flag{font-size:.8rem;color:#e0a030;background:rgba(224,160,48,.1);padding:.3rem .6rem;border-radius:.4rem;display:inline-block}
+      .review-body{white-space:pre-wrap;word-break:break-word}
+      .review-actions{display:flex;gap:.6rem}
+      .review-actions button{cursor:pointer}
+      .btn-approve{background:#2e7d32;color:#fff;border:none;border-radius:.4rem;padding:.5rem 1rem}
+      .btn-delete{background:#c62828;color:#fff;border:none;border-radius:.4rem;padding:.5rem 1rem}
+      .empty{color:var(--muted,#888)}
+      .denied{color:#c62828}
+    </style>
+  </head>
+  <body>
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="/">灵熵 · Qi</a>
+      <div class="topnav-links"><a href="/events/">事件与讨论</a><a href="/resources/">资源交换</a><a href="/contact/">私密联系</a></div>
+      <div class="topnav-auth" id="authState">加载中…</div>
+    </div></nav>
+    <main class="review">
+      <h1>内容审核后台</h1>
+      <p class="review-meta">这里列出被系统自动屏蔽（重复/垃圾内容检测）的帖子，覆盖全部站点。人工确认不是恶意内容后点"放行"，确认是垃圾内容点"删除"。</p>
+      <div id="reviewList"><p class="empty">加载中…</p></div>
+    </main>
+    <script type="module">
+      import { supabase } from '/js/supabase-client.js';
+      import { renderAuthState, escapeHtml, formatTime } from '/js/community.js';
+
+      const ADMIN_UID = '12accc72-68ff-4b51-91e3-0c288a367d86';
+      const listEl = document.getElementById('reviewList');
+
+      const SITE_LABELS = {
+        soulentropy: 'SoulEntropy',
+        vietnamzichan: 'VietnamZiChan',
+        vietchiphub: 'VietChipHub',
+        vngo: 'VNGO',
+        brdiag: 'BRDiag',
+        globalewaste: 'GlobalEWasteRecovery',
+      };
+
+      async function main() {
+        const session = await renderAuthState('authState');
+        if (!session || !session.user) {
+          listEl.innerHTML = '<p class="denied">请先<a href="/login/">登录</a>管理员账号后再查看审核后台。</p>';
+          return;
+        }
+        if (session.user.id !== ADMIN_UID) {
+          listEl.innerHTML = '<p class="denied">此账号没有审核权限。</p>';
+          return;
+        }
+        await loadQueue();
+      }
+
+      async function loadQueue() {
+        listEl.innerHTML = '<p class="empty">加载中…</p>';
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .eq('status', 'hidden')
+          .order('created_at', { ascending: false })
+          .limit(200);
+        if (error) {
+          listEl.innerHTML = `<p class="denied">加载失败：${escapeHtml(error.message)}</p>`;
+          return;
+        }
+        if (!data || !data.length) {
+          listEl.innerHTML = '<p class="empty">暂无待审核内容。</p>';
+          return;
+        }
+        listEl.innerHTML = data.map((p) => `
+          <article class="review-item" data-id="${p.id}">
+            <div class="review-meta">${escapeHtml(SITE_LABELS[p.site] || p.site)} · ${escapeHtml(p.kind)} · ${escapeHtml(p.display_name)} · ${formatTime(p.created_at)}</div>
+            ${p.flag_reason ? `<div class="review-flag">${escapeHtml(p.flag_reason)}</div>` : ''}
+            ${p.title ? `<strong>${escapeHtml(p.title)}</strong>` : ''}
+            <div class="review-body">${escapeHtml(p.body)}</div>
+            <div class="review-actions">
+              <button type="button" class="btn-approve" data-act="approve">放行（确认不是恶意内容）</button>
+              <button type="button" class="btn-delete" data-act="delete">删除（确认是垃圾内容）</button>
+            </div>
+          </article>
+        `).join('');
+        listEl.querySelectorAll('.review-item').forEach((item) => {
+          const id = item.dataset.id;
+          item.querySelector('[data-act="approve"]').addEventListener('click', async () => {
+            const { error } = await supabase.from('posts').update({ status: 'active', flag_reason: null }).eq('id', id);
+            if (error) { alert('放行失败：' + error.message); return; }
+            item.remove();
+            if (!listEl.children.length) listEl.innerHTML = '<p class="empty">暂无待审核内容。</p>';
+          });
+          item.querySelector('[data-act="delete"]').addEventListener('click', async () => {
+            if (!confirm('确定永久删除这条内容？')) return;
+            const { error } = await supabase.from('posts').delete().eq('id', id);
+            if (error) { alert('删除失败：' + error.message); return; }
+            item.remove();
+            if (!listEl.children.length) listEl.innerHTML = '<p class="empty">暂无待审核内容。</p>';
+          });
+        });
+      }
+
+      main();
+    </script>
+  </body>
+</html>
