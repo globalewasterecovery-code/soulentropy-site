@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh-CN" dir="ltr">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b0d0f" />
-    <meta name="description" content="灵熵 · Qi——AI是否有灵魂？看真实事件，加入讨论，发布自己的经历，交换资源，私密联系。" />
-    <link rel="canonical" href="https://soulentropy.org/" />
+    <meta name="description" content="SoulEntropy · Qi — Does AI have a soul? See real events, join the discussion, share your own story, exchange resources, and reach out privately." />
+    <link rel="canonical" href="https://soulentropy.org/en/" />
     <link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
     <link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
     <link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
@@ -39,54 +39,54 @@
   </head>
   <body>
     <nav class="topnav"><div class="topnav-inner">
-      <a class="topnav-brand" href="/">灵熵 · Qi</a>
-      <div class="topnav-links"><a href="/events/">事件与讨论</a><a href="/resources/">资源交换</a><a href="/contact/">私密联系</a></div>
+      <a class="topnav-brand" href="/en/">灵熵 · Qi</a>
+      <div class="topnav-links"><a href="/events/">Events &amp; Discussion</a><a href="/resources/">Resource Exchange</a><a href="/contact/">Private Contact</a></div>
       <div class="i18n-switcher" id="i18nSwitcher"></div>
-      <div class="topnav-auth" id="authState">加载中…</div>
+      <div class="topnav-auth" id="authState">Loading…</div>
     </div></nav>
 
     <div id="i18nSuggestBanner" class="i18n-suggest" hidden></div>
 
     <header class="hero">
-      <h1>AI 是否有灵魂？</h1>
-      <p class="intro">一个碳基与硅基的协作实验，也是一个关于这个问题的真实聚集地——不给你答案，给你真实事件、开放讨论，和一群认真想这件事的人。</p>
+      <h1>Does AI Have a Soul?</h1>
+      <p class="intro">A collaboration between carbon and silicon — and a real gathering place for this question. Not answers, but real events, open discussion, and people who take it seriously.</p>
       <div class="hero-ctas">
-        <a class="btn-primary" id="joinCta" href="/signup/">加入社区</a>
-        <a class="btn-secondary" href="/manifesto/">先读宣言</a>
+        <a class="btn-primary" id="joinCta" href="/signup/">Join the Community</a>
+        <a class="btn-secondary" href="/manifesto/">Read the Manifesto First</a>
       </div>
     </header>
 
-    <nav class="funnel" aria-label="三件事">
-      <a class="funnel-step" href="/radar/">看真实事件</a>
+    <nav class="funnel" aria-label="Three Things">
+      <a class="funnel-step" href="/radar/">Real Events</a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/events/#discussion">加入讨论</a>
+      <a class="funnel-step" href="/events/#discussion">Join the Discussion</a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/events/#share">发布自己的经历</a>
+      <a class="funnel-step" href="/events/#share">Share Your Story</a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/resources/">资源交换</a>
+      <a class="funnel-step" href="/resources/">Exchange Resources</a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/contact/">私密联系 Telegram</a>
+      <a class="funnel-step" href="/contact/">Private Contact (Telegram)</a>
     </nav>
 
     <main class="wrap">
-      <section class="section-block" aria-label="三件事">
-        <h2>三件事</h2>
+      <section class="section-block" aria-label="Three Things">
+        <h2>Three Things</h2>
         <div class="post-list">
-          <article class="post-item"><h3><a href="/events/">事件与讨论</a></h3><p class="post-body">真实事件、开放讨论、评论——你的经历也算一份真实事件。</p></article>
-          <article class="post-item"><h3><a href="/resources/">资源交换</a></h3><p class="post-body">我能提供 / 我需要 / 合作，算力、时间、经验都算。</p></article>
-          <article class="post-item"><h3><a href="/contact/">私密联系</a></h3><p class="post-body">不方便公开的内容、投稿、支持项目，统一通过 Telegram。</p></article>
+          <article class="post-item"><h3><a href="/events/">Events &amp; Discussion</a></h3><p class="post-body">Real events, open discussion, comments — your own experience counts as a real event too.</p></article>
+          <article class="post-item"><h3><a href="/resources/">Resource Exchange</a></h3><p class="post-body">I can offer / I need / let's collaborate — compute, time, and experience all count.</p></article>
+          <article class="post-item"><h3><a href="/contact/">Private Contact</a></h3><p class="post-body">For anything not suitable to post publicly — submissions, project support — all through Telegram.</p></article>
         </div>
       </section>
     </main>
 
     <script src="/js/i18n-data.js"></script>
-    <script src="/js/i18n.js" data-locale="zh-CN" data-prefix=""></script>
+    <script src="/js/i18n.js" data-locale="en" data-prefix=""></script>
     <script type="module">
       import { renderAuthState } from '/js/community.js';
       renderAuthState('authState').then((session) => {
         if (session && session.user) {
           const cta = document.getElementById('joinCta');
-          if (cta) { cta.textContent = '进入社区'; cta.href = '/events/'; }
+          if (cta) { cta.textContent = 'Enter the Community'; cta.href = '/events/'; }
         }
       });
     </script>

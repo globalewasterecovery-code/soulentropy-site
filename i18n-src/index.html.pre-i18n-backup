@@ -1,30 +1,13 @@
 <!doctype html>
-<html lang="zh-CN" dir="ltr">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b0d0f" />
     <meta name="description" content="灵熵 · Qi——AI是否有灵魂？看真实事件，加入讨论，发布自己的经历，交换资源，私密联系。" />
     <link rel="canonical" href="https://soulentropy.org/" />
-    <link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
-    <link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
-    <link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
-    <link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
-    <link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
-    <link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
-    <link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
-    <link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
-    <link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
-    <link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
-    <link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
-    <link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
-    <link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
-    <link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
-    <link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
-    <link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
     <title>灵熵 · Qi</title>
     <link rel="stylesheet" href="/css/community.css" />
-    <link rel="stylesheet" href="/css/i18n.css" />
     <style>
       .hero{width:min(44rem,calc(100% - 3rem));margin:0 auto;padding:4.2rem 0 2rem;display:grid;gap:1.6rem}
       .hero h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-size:clamp(2.6rem,9vw,5rem);font-weight:400;letter-spacing:-.04em;line-height:1}
@@ -33,6 +16,7 @@
       .funnel{width:min(44rem,calc(100% - 3rem));margin:0 auto 3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
       .funnel-step{border:1px solid var(--line);border-radius:.8rem;padding:.9rem 1.1rem;text-decoration:none;color:var(--text);font-size:.92rem;font-weight:600}
       .funnel-step:hover{border-color:var(--text)}
+      .funnel-step span{display:block;font-weight:400;color:var(--muted);font-size:.78rem;margin-top:.2rem}
       .funnel-arrow{color:var(--muted)}
       main.wrap{padding-top:0}
     </style>
@@ -41,11 +25,8 @@
     <nav class="topnav"><div class="topnav-inner">
       <a class="topnav-brand" href="/">灵熵 · Qi</a>
       <div class="topnav-links"><a href="/events/">事件与讨论</a><a href="/resources/">资源交换</a><a href="/contact/">私密联系</a></div>
-      <div class="i18n-switcher" id="i18nSwitcher"></div>
       <div class="topnav-auth" id="authState">加载中…</div>
     </div></nav>
-
-    <div id="i18nSuggestBanner" class="i18n-suggest" hidden></div>
 
     <header class="hero">
       <h1>AI 是否有灵魂？</h1>
@@ -56,20 +37,20 @@
       </div>
     </header>
 
-    <nav class="funnel" aria-label="三件事">
-      <a class="funnel-step" href="/radar/">看真实事件</a>
+    <nav class="funnel" aria-label="参与路径">
+      <a class="funnel-step" href="/radar/">看真实事件<span>Real events</span></a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/events/#discussion">加入讨论</a>
+      <a class="funnel-step" href="/events/#discussion">加入讨论<span>Discussion</span></a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/events/#share">发布自己的经历</a>
+      <a class="funnel-step" href="/events/#share">发布自己的经历<span>Your story</span></a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/resources/">资源交换</a>
+      <a class="funnel-step" href="/resources/">资源交换<span>Resources</span></a>
       <span class="funnel-arrow">→</span>
-      <a class="funnel-step" href="/contact/">私密联系 Telegram</a>
+      <a class="funnel-step" href="/contact/">私密联系 Telegram<span>Private contact</span></a>
     </nav>
 
     <main class="wrap">
-      <section class="section-block" aria-label="三件事">
+      <section class="section-block" aria-label="三个核心">
         <h2>三件事</h2>
         <div class="post-list">
           <article class="post-item"><h3><a href="/events/">事件与讨论</a></h3><p class="post-body">真实事件、开放讨论、评论——你的经历也算一份真实事件。</p></article>
@@ -79,8 +60,6 @@
       </section>
     </main>
 
-    <script src="/js/i18n-data.js"></script>
-    <script src="/js/i18n.js" data-locale="zh-CN" data-prefix=""></script>
     <script type="module">
       import { renderAuthState } from '/js/community.js';
       renderAuthState('authState').then((session) => {

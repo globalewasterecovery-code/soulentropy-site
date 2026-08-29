@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="__HTML_LANG__" dir="__DIR__">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d0f" />
+    <meta name="description" content="__META_DESCRIPTION__" />
+    <link rel="canonical" href="__CANONICAL__" />
+__HREFLANG_LINKS__
+    <title>__BRAND__</title>
+    <link rel="stylesheet" href="/css/community.css" />
+    <link rel="stylesheet" href="/css/i18n.css" />
+    <style>
+      .hero{width:min(44rem,calc(100% - 3rem));margin:0 auto;padding:4.2rem 0 2rem;display:grid;gap:1.6rem}
+      .hero h1{margin:0;font-family:Georgia,"Times New Roman","Noto Serif SC",serif;font-size:clamp(2.6rem,9vw,5rem);font-weight:400;letter-spacing:-.04em;line-height:1}
+      .hero .intro{max-width:34rem;margin:0;color:var(--muted);font-size:clamp(1rem,2.3vw,1.15rem);line-height:1.9}
+      .hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap}
+      .funnel{width:min(44rem,calc(100% - 3rem));margin:0 auto 3rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
+      .funnel-step{border:1px solid var(--line);border-radius:.8rem;padding:.9rem 1.1rem;text-decoration:none;color:var(--text);font-size:.92rem;font-weight:600}
+      .funnel-step:hover{border-color:var(--text)}
+      .funnel-arrow{color:var(--muted)}
+      main.wrap{padding-top:0}
+    </style>
+  </head>
+  <body>
+    <nav class="topnav"><div class="topnav-inner">
+      <a class="topnav-brand" href="__ROOT_PATH__">__BRAND__</a>
+      <div class="topnav-links"><a href="__PREFIX__/events/">__NAV_EVENTS__</a><a href="__PREFIX__/resources/">__NAV_RESOURCES__</a><a href="__PREFIX__/contact/">__NAV_CONTACT__</a></div>
+      <div class="i18n-switcher" id="i18nSwitcher"></div>
+      <div class="topnav-auth" id="authState">__LOADING__</div>
+    </div></nav>
+
+    <div id="i18nSuggestBanner" class="i18n-suggest" hidden></div>
+
+    <header class="hero">
+      <h1>__HERO_H1__</h1>
+      <p class="intro">__HERO_INTRO__</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" id="joinCta" href="__PREFIX__/signup/">__CTA_PRIMARY__</a>
+        <a class="btn-secondary" href="__PREFIX__/manifesto/">__CTA_SECONDARY__</a>
+      </div>
+    </header>
+
+    <nav class="funnel" aria-label="__SECTION_H2__">
+      <a class="funnel-step" href="__PREFIX__/radar/">__FUNNEL_1__</a>
+      <span class="funnel-arrow">→</span>
+      <a class="funnel-step" href="__PREFIX__/events/#discussion">__FUNNEL_2__</a>
+      <span class="funnel-arrow">→</span>
+      <a class="funnel-step" href="__PREFIX__/events/#share">__FUNNEL_3__</a>
+      <span class="funnel-arrow">→</span>
+      <a class="funnel-step" href="__PREFIX__/resources/">__FUNNEL_4__</a>
+      <span class="funnel-arrow">→</span>
+      <a class="funnel-step" href="__PREFIX__/contact/">__FUNNEL_5__</a>
+    </nav>
+
+    <main class="wrap">
+      <section class="section-block" aria-label="__SECTION_H2__">
+        <h2>__SECTION_H2__</h2>
+        <div class="post-list">
+          <article class="post-item"><h3><a href="__PREFIX__/events/">__CARD1_H3__</a></h3><p class="post-body">__CARD1_P__</p></article>
+          <article class="post-item"><h3><a href="__PREFIX__/resources/">__CARD2_H3__</a></h3><p class="post-body">__CARD2_P__</p></article>
+          <article class="post-item"><h3><a href="__PREFIX__/contact/">__CARD3_H3__</a></h3><p class="post-body">__CARD3_P__</p></article>
+        </div>
+      </section>
+    </main>
+
+    <script src="/js/i18n-data.js"></script>
+    <script src="/js/i18n.js" data-locale="__CODE__" data-prefix="__PREFIX__"></script>
+    <script type="module">
+      import { renderAuthState } from '/js/community.js';
+      renderAuthState('authState').then((session) => {
+        if (session && session.user) {
+          const cta = document.getElementById('joinCta');
+          if (cta) { cta.textContent = '__CTA_PRIMARY_LOGGEDIN__'; cta.href = '__PREFIX__/events/'; }
+        }
+      });
+    </script>
+  </body>
+</html>

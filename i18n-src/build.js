@@ -1,0 +1,180 @@
+#!/usr/bin/env node
+// SoulEntropy i18n build script — reusable framework.
+// Reads registry.json (locale metadata) + strings.json (per-locale copy) +
+// template-home.html (token template), generates:
+//   site/index.html            (default locale, e.g. zh-CN, stays at root)
+//   site/<code>/index.html     (every other locale)
+// Also patches site/sitemap.xml with hreflang alternate entries for the
+// homepage across all locales.
+//
+// Usage: node build.js <path-to-site-repo-root>
+// Example: node build.js /path/to/soulentropy-site
+
+const fs = require('fs');
+const path = require('path');
+
+const SITE_ROOT = process.argv[2];
+if (!SITE_ROOT) {
+  console.error('Usage: node build.js <path-to-site-repo-root>');
+  process.exit(1);
+}
+
+const ORIGIN = 'https://soulentropy.org';
+const HERE = __dirname;
+
+const registry = JSON.parse(fs.readFileSync(path.join(HERE, 'registry.json'), 'utf8'));
+const strings = JSON.parse(fs.readFileSync(path.join(HERE, 'strings.json'), 'utf8'));
+const template = fs.readFileSync(path.join(HERE, 'template-home.html'), 'utf8');
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function pathFor(code, defaultCode) {
+  return code === defaultCode ? '/' : `/${code}/`;
+}
+
+const defaultLocale = registry.find((l) => l.default);
+if (!defaultLocale) {
+  console.error('registry.json must mark exactly one locale as "default": true');
+  process.exit(1);
+}
+
+function renderHreflangLinks() {
+  const lines = registry.map((l) => {
+    const href = ORIGIN + pathFor(l.code, defaultLocale.code);
+    return `    <link rel="alternate" hreflang="${l.code}" href="${href}" />`;
+  });
+  lines.push(`    <link rel="alternate" hreflang="x-default" href="${ORIGIN}/" />`);
+  return lines.join('\n');
+}
+
+function renderPage(locale) {
+  const s = strings[locale.code];
+  if (!s) throw new Error(`Missing strings for locale ${locale.code}`);
+  const urlPath = pathFor(locale.code, defaultLocale.code);
+  const isDefault = locale.code === defaultLocale.code;
+  const prefix = ''; // inner pages (events/resources/contact/...) are not yet localized;
+                      // homepage links point at the existing zh-CN pages until phase 2.
+
+  let out = template;
+  const replacements = {
+    __HTML_LANG__: locale.code,
+    __DIR__: locale.dir,
+    __META_DESCRIPTION__: escapeHtml(s.meta_description),
+    __CANONICAL__: ORIGIN + urlPath,
+    __HREFLANG_LINKS__: renderHreflangLinks(),
+    __BRAND__: escapeHtml(s.brand),
+    __ROOT_PATH__: pathFor(locale.code, defaultLocale.code),
+    __PREFIX__: prefix,
+    __NAV_EVENTS__: escapeHtml(s.nav_events),
+    __NAV_RESOURCES__: escapeHtml(s.nav_resources),
+    __NAV_CONTACT__: escapeHtml(s.nav_contact),
+    __LOADING__: escapeHtml(s.loading),
+    __HERO_H1__: escapeHtml(s.hero_h1),
+    __HERO_INTRO__: escapeHtml(s.hero_intro),
+    __CTA_PRIMARY__: escapeHtml(s.cta_primary),
+    __CTA_PRIMARY_LOGGEDIN__: escapeHtml(s.cta_primary_loggedin),
+    __CTA_SECONDARY__: escapeHtml(s.cta_secondary),
+    __FUNNEL_1__: escapeHtml(s.funnel_1),
+    __FUNNEL_2__: escapeHtml(s.funnel_2),
+    __FUNNEL_3__: escapeHtml(s.funnel_3),
+    __FUNNEL_4__: escapeHtml(s.funnel_4),
+    __FUNNEL_5__: escapeHtml(s.funnel_5),
+    __SECTION_H2__: escapeHtml(s.section_h2),
+    __CARD1_H3__: escapeHtml(s.card1_h3),
+    __CARD1_P__: escapeHtml(s.card1_p),
+    __CARD2_H3__: escapeHtml(s.card2_h3),
+    __CARD2_P__: escapeHtml(s.card2_p),
+    __CARD3_H3__: escapeHtml(s.card3_h3),
+    __CARD3_P__: escapeHtml(s.card3_p),
+    __CODE__: locale.code,
+  };
+  for (const [token, value] of Object.entries(replacements)) {
+    out = out.split(token).join(value);
+  }
+  return { out, urlPath, isDefault };
+}
+
+let written = [];
+for (const locale of registry) {
+  const { out, urlPath } = renderPage(locale);
+  const destRel = urlPath === '/' ? 'index.html' : `${locale.code}/index.html`;
+  const dest = path.join(SITE_ROOT, 'site', destRel);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.writeFileSync(dest, out, 'utf8');
+  written.push({ code: locale.code, path: urlPath, file: dest });
+}
+
+console.log('Generated pages:');
+for (const w of written) {
+  console.log(`  ${w.code.padEnd(6)} ${w.path.padEnd(8)} -> ${w.file}`);
+}
+
+// --- emit js/i18n-data.js: the small runtime-facing data slice ---
+// (registry + just the strings the client runtime needs: switcher label,
+// suggestion banner copy, brand name). Keeps the generic i18n.js runtime
+// free of any site-specific copy so it can be reused by other sites.
+const runtimeStrings = {};
+for (const l of registry) {
+  const s = strings[l.code];
+  runtimeStrings[l.code] = {
+    lang_label: s.lang_label,
+    suggest_text: s.suggest_text,
+    suggest_accept: s.suggest_accept,
+    suggest_dismiss: s.suggest_dismiss,
+    brand: s.brand,
+  };
+}
+const dataJs = `// AUTO-GENERATED by i18n/build.js — do not hand-edit. Edit strings.json instead.
+window.__I18N__ = ${JSON.stringify({ registry, defaultLocale: defaultLocale.code, strings: runtimeStrings }, null, 2)};
+`;
+const dataDest = path.join(SITE_ROOT, 'site', 'js', 'i18n-data.js');
+fs.mkdirSync(path.dirname(dataDest), { recursive: true });
+fs.writeFileSync(dataDest, dataJs, 'utf8');
+console.log(`Wrote runtime data: ${dataDest}`);
+
+// --- patch sitemap.xml: add one <url> entry per locale for the homepage ---
+const sitemapPath = path.join(SITE_ROOT, 'site', 'sitemap.xml');
+if (fs.existsSync(sitemapPath)) {
+  let sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  const alreadyPatched = sitemap.includes('xmlns:xhtml');
+  if (!alreadyPatched) {
+    sitemap = sitemap.replace(
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    );
+  }
+  const altLinks = registry
+    .map((l) => `      <xhtml:link rel="alternate" hreflang="${l.code}" href="${ORIGIN}${pathFor(l.code, defaultLocale.code)}" />`)
+    .join('\n');
+  const xdefault = `      <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}/" />`;
+
+  // Replace the existing homepage <url> block (loc == ORIGIN + '/') if present,
+  // otherwise leave sitemap untouched for that entry (safety: don't guess structure).
+  const homeUrlRe = /<url>\s*<loc>https:\/\/soulentropy\.org\/<\/loc>[\s\S]*?<\/url>/;
+  if (homeUrlRe.test(sitemap)) {
+    sitemap = sitemap.replace(homeUrlRe, (block) => {
+      if (block.includes('xhtml:link')) return block; // already patched
+      return block.replace('</url>', `${altLinks}\n${xdefault}\n    </url>`);
+    });
+  }
+
+  // Add one <url> entry for each non-default locale homepage (if not already present).
+  for (const l of registry) {
+    if (l.code === defaultLocale.code) continue;
+    const loc = ORIGIN + pathFor(l.code, defaultLocale.code);
+    if (sitemap.includes(`<loc>${loc}</loc>`)) continue;
+    const entry = `  <url>\n    <loc>${loc}</loc>\n${altLinks}\n${xdefault}\n  </url>\n`;
+    sitemap = sitemap.replace('</urlset>', `${entry}</urlset>`);
+  }
+
+  fs.writeFileSync(sitemapPath, sitemap, 'utf8');
+  console.log(`Patched sitemap.xml with hreflang alternates for ${registry.length} locales.`);
+} else {
+  console.log('sitemap.xml not found — skipped sitemap patch.');
+}

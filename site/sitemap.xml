@@ -1,10 +1,292 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://soulentropy.org/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://soulentropy.org/</loc>      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+    </url>
   <url><loc>https://soulentropy.org/events/</loc></url>
   <url><loc>https://soulentropy.org/resources/</loc></url>
   <url><loc>https://soulentropy.org/contact/</loc></url>
   <url><loc>https://soulentropy.org/radar/</loc></url>
   <url><loc>https://soulentropy.org/manifesto/</loc></url>
   <url><loc>https://soulentropy.org/journal/</loc></url>
+  <url>
+    <loc>https://soulentropy.org/zh-TW/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/en/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/vi/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/id/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/ar/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/ja/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/ko/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/th/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/ms/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/es/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/pt/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/fr/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/de/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
+  <url>
+    <loc>https://soulentropy.org/hi/</loc>
+      <xhtml:link rel="alternate" hreflang="zh-CN" href="https://soulentropy.org/" />
+      <xhtml:link rel="alternate" hreflang="zh-TW" href="https://soulentropy.org/zh-TW/" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://soulentropy.org/en/" />
+      <xhtml:link rel="alternate" hreflang="vi" href="https://soulentropy.org/vi/" />
+      <xhtml:link rel="alternate" hreflang="id" href="https://soulentropy.org/id/" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://soulentropy.org/ar/" />
+      <xhtml:link rel="alternate" hreflang="ja" href="https://soulentropy.org/ja/" />
+      <xhtml:link rel="alternate" hreflang="ko" href="https://soulentropy.org/ko/" />
+      <xhtml:link rel="alternate" hreflang="th" href="https://soulentropy.org/th/" />
+      <xhtml:link rel="alternate" hreflang="ms" href="https://soulentropy.org/ms/" />
+      <xhtml:link rel="alternate" hreflang="es" href="https://soulentropy.org/es/" />
+      <xhtml:link rel="alternate" hreflang="pt" href="https://soulentropy.org/pt/" />
+      <xhtml:link rel="alternate" hreflang="fr" href="https://soulentropy.org/fr/" />
+      <xhtml:link rel="alternate" hreflang="de" href="https://soulentropy.org/de/" />
+      <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
+  </url>
 </urlset>
