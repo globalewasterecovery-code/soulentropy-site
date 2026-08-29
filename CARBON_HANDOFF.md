@@ -2,7 +2,7 @@ DATE=2026-08-29
 AI_WORKER=Claude
 PROJECT=SoulEntropy (soulentropy.org)
 BRANCH=main
-LAST_COMMIT=(pending — see COMPLETED below, commit created this session)
+LAST_COMMIT=6c8966c
 COMPLETED=
 - P0 (社区功能上线闭环): SPAM_SCOPE_FIX/CROSS_SITE_POST/SAME_SITE_REPEAT/DIFFERENT_USER_SIMILAR 全部 PASS（上一轮已确认，未改动）。SoulEntropy/VietChipHub/VNGO 三仓库均确认 FAST_FORWARD（本地 HEAD 的父提交与 origin/main 当前 HEAD SHA 完全一致）。push 仍被环境阻塞（见 BLOCKERS），未新增改动，等待 OpenClaw 本机心跳完成。
 - P1 (SoulEntropy 多语言底座): 建立了可复用的 i18n 构建框架（非硬编码）：
