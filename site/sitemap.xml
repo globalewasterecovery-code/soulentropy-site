@@ -289,4 +289,7 @@
       <xhtml:link rel="alternate" hreflang="hi" href="https://soulentropy.org/hi/" />
       <xhtml:link rel="alternate" hreflang="x-default" href="https://soulentropy.org/" />
   </url>
+  <url>
+    <loc>https://soulentropy.org/journal/humanoid-combat-robots/</loc>
+  </url>
 </urlset>
