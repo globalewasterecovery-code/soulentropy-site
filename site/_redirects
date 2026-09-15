@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects
+# 撤下不符定位的旧文：humanoid-robot-ipo-reality-check（机器人产业/IPO 新闻）
+# 410 Gone = 该页面已永久移除，不再出现在列表与 sitemap 中
+/journal/humanoid-robot-ipo-reality-check/  /journal/  410
+/journal/humanoid-robot-ipo-reality-check   /journal/  410
