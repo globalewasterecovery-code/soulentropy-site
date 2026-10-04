@@ -5,7 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b0d0f" />
     <meta name="description" content="灵魂雷达 · Soul Radar — 关于AI意识与灵魂议题的外部文章与讨论索引，标注出处，不转载全文。" />
+    <link rel="canonical" href="https://soulentropy.org/radar/" />
     <title>灵魂雷达 · Soul Radar</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "灵魂雷达 · Soul Radar",
+      "description": "关于AI意识与灵魂议题的外部文章与讨论索引",
+      "url": "https://soulentropy.org/radar/",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Soul Entropy",
+        "url": "https://soulentropy.org"
+      }
+    }
+    </script>
     <style>
       :root{color-scheme:dark;--bg:#0b0d0f;--text:#f2f0e9;--muted:#aaa99f;--line:rgba(242,240,233,0.16)}
       *{box-sizing:border-box}
@@ -74,13 +89,14 @@
         </details>
       </div>
 
-      <div class="entry" id="event-medium-does-ai-have-soul">
-        <h3><a href="https://medium.com/@cbp.info/does-ai-have-a-soul-a81ea12bbe97" target="_blank" rel="noopener noreferrer">Does AI Have a Soul? Rethinking Consciousness in the Age of AI</a></h3>
-        <div class="src">Medium · Steve Xing</div>
-        <p>独立作者的个人思考，代表的是散落在互联网各个角落、非机构身份的普通人观点——这类声音也是灵熵炁想收集的对象。</p>
+      <div class="entry" id="event-agent-persona-drift">
+        <h3><a href="https://venturebeat.com/ai/agent-persona-drift-research-2026/" target="_blank" rel="noopener noreferrer">Agentic Persona Drift: Multi-Day Autonomous AI & Memory Continuity</a></h3>
+        <div class="src">VentureBeat & AI Security Research · 2026-09-28</div>
+        <p>长时间跨天运行的 AI Agent 在连续交互中出现“人格与规则隐形漂移”。这是否证明单纯加大 Token 窗口无法建立真实的人格连续性？</p>
+        <p style="font-size:0.85rem;color:var(--muted);margin-top:0.4rem;"><b>AI 分析提问：</b>如果 AI 的“意志”只能依赖每次提示词重新加载，而不能在本地记忆中自我纠偏，它表现出的“人格”究竟是真实的连续意识，还是高度逼真的离散幻觉？</p>
       <details class="event-comments"><summary>评论</summary>
-          <form class="community-form" id="commentForm-medium-does-ai-have-soul"><textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea><button type="submit">发布</button><p class="msg" id="commentMsg-medium-does-ai-have-soul"></p></form>
-          <div class="post-list" id="comments-medium-does-ai-have-soul"></div>
+          <form class="community-form" id="commentForm-agent-persona-drift"><textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea><button type="submit">发布</button><p class="msg" id="commentMsg-agent-persona-drift"></p></form>
+          <div class="post-list" id="comments-agent-persona-drift"></div>
         </details>
       </div>
 
@@ -93,7 +109,7 @@
   <script type="module">
 import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
 renderAuthState('authState');
-const EVENT_SLUGS = ['mit-tr-consciousness-trap','ted-chiang-not-conscious','berggruen-human-future','gatech-being-in-world','medium-does-ai-have-soul'];
+const EVENT_SLUGS = ['mit-tr-consciousness-trap','ted-chiang-not-conscious','berggruen-human-future','gatech-being-in-world','medium-does-ai-have-soul','agent-persona-drift'];
 EVENT_SLUGS.forEach((slug) => {
   const target = `radar:${slug}`;
   async function refresh() {

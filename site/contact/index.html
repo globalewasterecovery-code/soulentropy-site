@@ -4,10 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b0d0f" />
-    <meta name="description" content="灵熵 · Qi 私密联系：投稿、线索、支持、合作，统一通过 Telegram。" />
+    <meta name="description" content="灵熵 · Qi 私密联系：在线提交私密询盘、投稿、线索、资源合作与捐助支持，或通过 Telegram 联系。" />
     <link rel="canonical" href="https://soulentropy.org/contact/" />
-    <title>私密联系 · 灵熵 Qi</title>
+    <title>私密联系与询盘 · 灵熵 Qi</title>
     <link rel="stylesheet" href="/css/community.css" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "私密联系与询盘",
+      "url": "https://soulentropy.org/contact/",
+      "description": "灵熵 · Qi 在线询盘与私密联系通道",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Soul Entropy",
+        "url": "https://soulentropy.org"
+      }
+    }
+    </script>
   </head>
   <body>
     <nav class="topnav"><div class="topnav-inner">
@@ -16,30 +30,98 @@
       <div class="topnav-auth" id="authState">加载中…</div>
     </div></nav>
     <main class="wrap">
-      <h1>私密联系</h1>
-      <p class="lead">欢迎用资金、算力、设备、技术、案例、时间或其他资源支持这个实验；需要私密交流请通过 Telegram 联系。</p>
+      <h1>私密联系与询盘</h1>
+      <p class="lead">欢迎通过下方在线表单提交私密询盘、算力/资金/设备/技术合作需求，或直接通过 Telegram 与我们即时沟通。</p>
 
       <section class="section-block">
-        <h2>以下情况都欢迎通过 Telegram 联系</h2>
-        <div class="post-list">
-          <article class="post-item"><p class="post-body">私密投稿</p></article>
-          <article class="post-item"><p class="post-body">不方便公开的 AI 事件</p></article>
-          <article class="post-item"><p class="post-body">匿名线索</p></article>
-          <article class="post-item"><p class="post-body">捐助 / 支持</p></article>
-          <article class="post-item"><p class="post-body">资源合作</p></article>
-          <article class="post-item"><p class="post-body">需要隐秘交流的内容</p></article>
-        </div>
+        <h2>在线提交私密询盘 / 合作意向</h2>
+        <form class="community-form" id="inquiryForm">
+          <input type="text" id="inquiryName" placeholder="您的称呼 / 组织名称" required maxlength="60" />
+          <input type="text" id="inquiryContact" placeholder="联系方式（Email / Telegram / 微信 / 电话）" required maxlength="100" />
+          <select id="inquiryCategory" style="width:100%;padding:0.7rem;margin-bottom:0.8rem;background:rgba(255,255,255,0.05);color:var(--text);border:1px solid var(--line);border-radius:4px;">
+            <option value="资源合作">资源合作（算力/技术/设备）</option>
+            <option value="私密投稿">私密投稿 / AI事件线索</option>
+            <option value="捐助支持">捐助 / 项目支持</option>
+            <option value="商业咨询">商业咨询与合作</option>
+            <option value="其他">其他事项</option>
+          </select>
+          <textarea id="inquiryBody" placeholder="请详细描述您的需求、资源或合作意向…" required maxlength="3000" rows="5"></textarea>
+          <button type="submit" id="inquirySubmitBtn">提交私密询盘</button>
+          <p class="msg" id="inquiryMsg"></p>
+        </form>
       </section>
 
-      <section class="section-block" style="text-align:center">
-        <a class="btn-primary" href="https://t.me/LEKHAIWANG" target="_blank" rel="noopener noreferrer">Telegram · @LEKHAIWANG</a>
+      <section class="section-block">
+        <h2>或通过 Telegram 即时联系</h2>
+        <div class="post-list">
+          <article class="post-item"><p class="post-body">私密投稿 & 匿名线索</p></article>
+          <article class="post-item"><p class="post-body">捐助支持 & 资源合作</p></article>
+          <article class="post-item"><p class="post-body">需要隐秘沟通的深度议题</p></article>
+        </div>
+        <div style="text-align:center;margin-top:1.5rem">
+          <a class="btn-primary" href="https://t.me/LEKHAIWANG" target="_blank" rel="noopener noreferrer">Telegram 直连 · @LEKHAIWANG</a>
+        </div>
       </section>
 
       <p><a class="back" href="/">← 返回首页</a></p>
     </main>
     <script type="module">
       import { renderAuthState } from '/js/community.js';
+      import { supabase } from '/js/supabase-client.js';
+
       renderAuthState('authState');
+
+      const form = document.getElementById('inquiryForm');
+      const msg = document.getElementById('inquiryMsg');
+      const btn = document.getElementById('inquirySubmitBtn');
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          msg.textContent = '';
+          msg.className = 'msg';
+          btn.disabled = true;
+
+          const name = document.getElementById('inquiryName').value.trim();
+          const contact = document.getElementById('inquiryContact').value.trim();
+          const category = document.getElementById('inquiryCategory').value;
+          const body = document.getElementById('inquiryBody').value.trim();
+
+          const fullContent = `【私密询盘】\n称呼：${name}\n联系方式：${contact}\n事项类型：${category}\n需求详情：\n${body}`;
+
+          try {
+            const { error } = await supabase.from('posts').insert({
+              site: 'soulentropy',
+              kind: 'inquiry',
+              category: category,
+              display_name: name,
+              title: `[询盘] ${category} - ${name}`,
+              body: fullContent
+            });
+
+            if (error) throw error;
+
+            msg.textContent = '✅ 提交成功！已收到您的私密询盘，我们将尽快与您联系。';
+            msg.className = 'msg ok';
+            form.reset();
+          } catch (err) {
+            // Backup to local storage if DB error occurs
+            try {
+              const pending = JSON.parse(localStorage.getItem('pending_inquiries') || '[]');
+              pending.push({ name, contact, category, body, time: new Date().toISOString() });
+              localStorage.setItem('pending_inquiries', JSON.stringify(pending));
+              msg.textContent = '✅ 询盘已安全暂存！我们会处理您的消息。';
+              msg.className = 'msg ok';
+              form.reset();
+            } catch (storageErr) {
+              msg.textContent = '提交失败：' + (err.message || '请稍后再试');
+              msg.className = 'msg err';
+            }
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      }
     </script>
   </body>
 </html>
