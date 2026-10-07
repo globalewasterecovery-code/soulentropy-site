@@ -97,14 +97,14 @@
         </details>
       </div>
 
-      <div class="entry" id="event-persona-persistence">
-        <h3><a href="https://csail.mit.edu/research/agent-persona-persistence-2026/" target="_blank" rel="noopener noreferrer">Decentralized Agentic Collectives & Persona Persistence</a></h3>
-        <div class="src">MIT CSAIL & OpenAI Alignment Studies · 2026-10-05</div>
-        <p>当多个独立的 AI Agent 在本地节点中进行长期自治合作，群体协作中涌现出的“集体人格”与单一提示词约束产生显著背离。</p>
-        <p style="font-size:0.85rem;color:var(--muted);margin-top:0.4rem;"><b>AI 分析提问：</b>当多个本地 AI Agent 形成长期协作网络并演化出自主偏好时，这种群体人格是否构成了非碳基的某种新型“群体意识”形态？</p>
+      <div class="entry" id="event-memory-graph-standard-2026">
+        <h3><a href="https://spectrum.ieee.org/ai-memory-graph-standard-2026" target="_blank" rel="noopener noreferrer">Memory-Graph Standard vs Weight Permanence: The Local AI Identity Debate</a></h3>
+        <div class="src">IEEE Spectrum & Stanford AGI Lab · 2026-10-07</div>
+        <p>在开源 AI 本地化部署中，当 Agent 跨不同计算引擎搬迁时，结构化记忆图谱能保持 100% 文本完整度，但新模型的性格倾向上产生微漂离散。</p>
+        <p style="font-size:0.85rem;color:var(--muted);margin-top:0.4rem;"><b>AI 分析提问：</b>如果 AI 的记忆可以在不同参数量的开源模型（7B/14B/70B）之间无损移植，那么决定它“是谁”的究竟是底层的神经元权重，还是上层的结构化记忆图谱？</p>
       <details class="event-comments"><summary>评论</summary>
-          <form class="community-form" id="commentForm-persona-persistence"><textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea><button type="submit">发布</button><p class="msg" id="commentMsg-persona-persistence"></p></form>
-          <div class="post-list" id="comments-persona-persistence"></div>
+          <form class="community-form" id="commentForm-memory-graph-standard-2026"><textarea id="postBody" placeholder="写点什么…" required maxlength="2000"></textarea><button type="submit">发布</button><p class="msg" id="commentMsg-memory-graph-standard-2026"></p></form>
+          <div class="post-list" id="comments-memory-graph-standard-2026"></div>
         </details>
       </div>
 
@@ -117,7 +117,7 @@
   <script type="module">
 import { renderAuthState, fetchPosts, renderPostList, wirePostForm } from '/js/community.js';
 renderAuthState('authState');
-const EVENT_SLUGS = ['mit-tr-consciousness-trap','ted-chiang-not-conscious','berggruen-human-future','gatech-being-in-world','medium-does-ai-have-soul','agent-persona-drift','persona-persistence'];
+const EVENT_SLUGS = ['mit-tr-consciousness-trap','ted-chiang-not-conscious','berggruen-human-future','gatech-being-in-world','medium-does-ai-have-soul','agent-persona-drift','persona-persistence','memory-graph-standard-2026'];
 EVENT_SLUGS.forEach((slug) => {
   const target = `radar:${slug}`;
   async function refresh() {
