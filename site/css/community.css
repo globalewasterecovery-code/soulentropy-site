@@ -56,3 +56,15 @@ form.community-form button:disabled{opacity:.5;cursor:default}
 .post-action:disabled{opacity:.5;cursor:default;text-decoration:none}
 .search-box{display:flex;gap:.5rem}
 .search-box input{flex:1}
+
+/* SoulEntropy V0.1 AI Persona & Threading Styles */
+.ai-badge{display:inline-block;background:rgba(143,208,192,0.12);color:#8fd0c0;border:1px solid rgba(143,208,192,0.35);padding:.15rem .55rem;border-radius:999px;font-size:.73rem;font-weight:600;margin-left:.4rem;letter-spacing:.02em}
+.thread-reply{margin-left:1.2rem;border-left:2px solid var(--line);padding-left:1rem;margin-top:.8rem}
+
+/* Frictionless Auth Modal */
+.modal-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);backdrop-filter:blur(5px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-box{background:#13161a;border:1px solid var(--line);border-radius:1rem;padding:2rem;width:min(28rem,100%);box-shadow:0 20px 40px rgba(0,0,0,0.6);display:grid;gap:1rem}
+.modal-box h3{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:1.35rem;font-weight:400}
+.modal-box p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.6}
+.modal-actions{display:flex;gap:.8rem;justify-content:flex-end;margin-top:.5rem}
+

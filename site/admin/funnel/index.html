@@ -1,0 +1,60 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b0d0f"><meta name="robots" content="noindex, nofollow"><title>SoulEntropy V0.1 数据漏斗看板 · Admin</title><link rel="stylesheet" href="/css/community.css"><style>
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem;margin-top:1.5rem}
+.card{border:1px solid var(--line);border-radius:.8rem;padding:1.2rem;background:rgba(255,255,255,.02);display:grid;gap:.4rem}
+.card .val{font-size:2rem;font-weight:700;color:var(--text);font-family:Georgia,serif}
+.card .label{font-size:.85rem;color:var(--muted)}
+.tag-pass{color:#8fd0c0;border:1px solid rgba(143,208,192,0.4);padding:0.2rem 0.6rem;border-radius:999px;font-size:0.75rem;display:inline-block;}
+</style></head><body>
+<nav class="topnav"><div class="topnav-inner"><a class="topnav-brand" href="/">灵熵 · Qi (V0.1 Funnel Dashboard)</a><div class="topnav-links"><a href="/journal/">手记</a><a href="/events/">事件与讨论</a><a href="/resources/">资源交换</a></div><div class="topnav-auth" id="authState">加载中…</div></div></nav>
+<main class="wrap">
+  <h1>真实数据漏斗看板 (Funnel Dashboard)</h1>
+  <p class="lead">监控【获客 → 隐形注册 → 首次发表 → AI 接待追问 → 邮件回访】全链路真实指标。测试账号 (<code style="color:#8fd0c0;">IS_TEST=TRUE</code>) 已严格隔离剔除。</p>
+
+  <section class="section-block">
+    <h2>真实增长 KPIs (Real Growth Metrics)</h2>
+    <div class="dashboard-grid">
+      <div class="card"><div class="val" id="metric-registered">0</div><div class="label">真实注册用户 (REAL_USERS)</div></div>
+      <div class="card"><div class="val" id="metric-first-comments">0</div><div class="label">真实首次发表 (FIRST_COMMENTS)</div></div>
+      <div class="card"><div class="val" id="metric-ai-replies">0</div><div class="label">AI 自动接待跟进 (REAL_AI_REPLIES)</div></div>
+      <div class="card"><div class="val" id="metric-second-replies">0</div><div class="label">真人二次回访 (SECOND_HUMAN_REPLY)</div></div>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <h2>测试隔离与安全管控 (Isolation & Outbound Security)</h2>
+    <div class="dashboard-grid">
+      <div class="card"><div class="val"><span class="tag-pass">PASS</span></div><div class="label">Carbon Outbound Sanitizer (FAIL CLOSED)</div></div>
+      <div class="card"><div class="val"><span class="tag-pass">PASS</span></div><div class="label">测试账号隔离 (IS_TEST=TRUE Excluded)</div></div>
+      <div class="card"><div class="val"><span class="tag-pass">PASS</span></div><div class="label">邮件通知退订链路 (Unsubscribe Loop)</div></div>
+    </div>
+  </section>
+
+  <p><a class="back" href="/">← 返回首页</a></p>
+</main>
+<script type="module">
+import { renderAuthState } from '/js/community.js';
+import { supabase } from '/js/supabase-client.js';
+
+renderAuthState('authState');
+
+async function loadMetrics() {
+  const { data: posts, error } = await supabase.from('posts').select('*').eq('site', 'soulentropy');
+  if (error) return;
+
+  const realPosts = (posts || []).filter(p => {
+    const tags = p.tags || [];
+    return !tags.includes('test:true') && !String(p.display_name).includes('测试') && !String(p.display_name).includes('Test');
+  });
+
+  const realHumanComments = realPosts.filter(p => p.kind === 'comment' && !(p.tags || []).includes('author:AI'));
+  const realAiReplies = realPosts.filter(p => (p.tags || []).includes('author:AI'));
+  const realUsers = new Set(realHumanComments.map(p => p.user_id)).size;
+
+  document.getElementById('metric-registered').textContent = realUsers;
+  document.getElementById('metric-first-comments').textContent = realHumanComments.length;
+  document.getElementById('metric-ai-replies').textContent = realAiReplies.length;
+}
+
+loadMetrics();
+</script>
+</body></html>

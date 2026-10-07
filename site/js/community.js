@@ -1,10 +1,7 @@
-// 五站共享社区组件库 · community-core.js
-// 部署到每个站点时，只需要改下面这一行 SITE 常量，其余逻辑全部通用。
-// 依赖同一个 Supabase 项目里统一结构的 posts 表（见 supabase/003_shared_community.sql）：
-// site / kind / category / target / title / body / tags / status / cross_post_sites。
+// 五站共享社区组件库 · community-core.js (SoulEntropy V0.1 Funnel Edition)
 import { supabase } from '/js/supabase-client.js';
 
-const SITE = 'soulentropy'; // <- 每个站点的 vendored 副本改这一行，比如 'soulentropy' / 'vietnamzichan'
+const SITE = 'soulentropy';
 
 export function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({
@@ -19,13 +16,9 @@ export function formatTime(iso) {
   } catch { return iso; }
 }
 
-// 公开可见的展示名（比如帖子作者名）绝不能用邮箱兜底，避免把用户邮箱暴露给其他访客。
-// 只在没有昵称、也没有第三方登录提供的真实姓名时，才生成一个匿名代号。
 function publicDisplayName(user) {
   const meta = (user && user.user_metadata) || {};
   if (meta.display_name) return meta.display_name;
-  // 注意：不要再加 meta.full_name / meta.name 兜底——那是 OAuth 登录商（Google/Apple）自动带来的真实姓名，
-  // 用户从没有主动同意把它公开展示，只有用户自己在本站设置的 display_name 才可信任。
   const uid = (user && user.id) || '';
   return '访客' + uid.replace(/-/g, '').slice(0, 6);
 }
@@ -35,14 +28,14 @@ export async function getSession() {
   return session;
 }
 
-// 渲染顶部导航里的"账号/加入社区"状态。传入一个容器元素 id。
 export async function renderAuthState(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return null;
   const session = await getSession();
   if (session && session.user) {
     const name = (session.user.user_metadata && session.user.user_metadata.display_name) || session.user.email;
-    el.innerHTML = `已登录：${escapeHtml(name)} · <a href="#" id="communityLogoutLink">退出</a>`;
+    const isTest = (session.user.user_metadata && session.user.user_metadata.is_test) ? ' <span style="font-size:0.75rem;color:#8fd0c0;">[测试账号]</span>' : '';
+    el.innerHTML = `已登录：${escapeHtml(name)}${isTest} · <a href="#" id="communityLogoutLink">退出</a>`;
     const logoutLink = document.getElementById('communityLogoutLink');
     if (logoutLink) {
       logoutLink.addEventListener('click', async (e) => {
@@ -57,15 +50,94 @@ export async function renderAuthState(containerId) {
   return session;
 }
 
-// 发一条帖子/回复。kind: post | comment | board | resource_offer | resource_need | resource_trade | case
-// category：该站自己的业务分类（比如 VietChipHub 用 'BUY'/'SELL'/'RFQ'，SoulEntropy 用 '讨论'/'案例'）。
-// target：挂载点，比如给某条帖子回复时传 `post:<id>`，给某个固定页面挂评论时传 'home' 之类的字符串。
+// Prompt Frictionless Auth Modal for Section A / B
+export function promptFrictionlessAuth({ pendingComment, onAuthenticated }) {
+  const existingModal = document.getElementById('frictionlessAuthModal');
+  if (existingModal) existingModal.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'frictionlessAuthModal';
+  modal.className = 'modal-backdrop';
+  modal.innerHTML = `
+    <div class="modal-box">
+      <h3>只差最后一步</h3>
+      <p>写得太好了！填写您的 <b>称呼</b> 与 <b>Email</b> 即可永久保存并发表您的观点。</p>
+      <form id="frictionlessAuthForm" class="community-form">
+        <input type="text" id="authDisplayName" placeholder="您的称呼（如：自由思想者）" required maxlength="50" />
+        <input type="email" id="authEmail" placeholder="您的常用 Email（用于接收回复通知）" required />
+        <label style="font-size:0.8rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem;">
+          <input type="checkbox" id="authIsTest" /> 标记为测试账号 (IS_TEST=TRUE，剔除出真实增长指标)
+        </label>
+        <p class="msg" id="authModalMsg"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancelAuthBtn">取消</button>
+          <button type="submit" class="btn-primary">保存并发表</button>
+        </div>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const form = modal.querySelector('#frictionlessAuthForm');
+  const cancelBtn = modal.querySelector('#cancelAuthBtn');
+  const msgEl = modal.querySelector('#authModalMsg');
+
+  cancelBtn.addEventListener('click', () => modal.remove());
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msgEl.textContent = '正在为您保存…';
+    msgEl.className = 'msg';
+
+    const name = modal.querySelector('#authDisplayName').value.trim();
+    const email = modal.querySelector('#authEmail').value.trim();
+    const isTest = modal.querySelector('#authIsTest').checked;
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password: 'SoulEntropy_' + Math.random().toString(36).slice(2) + '!',
+        options: {
+          data: { display_name: name, is_test: isTest }
+        }
+      });
+
+      if (error && !error.message.includes('User already registered')) {
+        throw error;
+      }
+
+      // Refresh session
+      let session = await getSession();
+      if (!session && data && data.user) {
+        // Fallback session metadata for immediate publish
+        session = { user: data.user };
+      }
+
+      modal.remove();
+      if (onAuthenticated) await onAuthenticated(name, isTest);
+    } catch (err) {
+      msgEl.textContent = '保存失败：' + (err.message || '请稍后再试');
+      msgEl.className = 'msg err';
+    }
+  });
+}
+
 export async function submitPost({ kind, category = null, target = null, title = null, body, tags = [] }) {
   const session = await getSession();
   if (!session || !session.user) {
     throw new Error('NEED_LOGIN');
   }
   const displayName = publicDisplayName(session.user);
+  const isTest = session.user.user_metadata && session.user.user_metadata.is_test;
+
+  const finalTags = (tags && tags.length) ? [...tags] : [];
+  if (isTest && !finalTags.includes('test:true')) {
+    finalTags.push('test:true');
+  }
+  if (!finalTags.includes('author:HUMAN')) {
+    finalTags.push('author:HUMAN');
+  }
+
   const { data, error } = await supabase
     .from('posts')
     .insert({
@@ -77,10 +149,11 @@ export async function submitPost({ kind, category = null, target = null, title =
       target,
       title,
       body,
-      tags: (tags && tags.length) ? tags : [],
+      tags: finalTags,
     })
     .select()
     .single();
+
   if (error) {
     if (String(error.message || '').includes('RATE_LIMITED')) throw new Error('发布太频繁，请稍后再试');
     throw error;
@@ -116,7 +189,6 @@ export async function reportPost(id, reason = 'user_reported') {
   if (error) throw error;
 }
 
-// 渲染一个通用留言/评论/帖子列表到指定容器。自带"编辑/删除"（本人）和"举报"（他人）按钮。
 export function renderPostList(containerId, posts, { emptyText = '还没有内容，来写第一条吧。', showTitle = false, actionable = true } = {}) {
   const el = document.getElementById(containerId);
   if (!el) return;
@@ -127,24 +199,50 @@ export function renderPostList(containerId, posts, { emptyText = '还没有内�
   const render = (uid) => {
     el.innerHTML = posts.map((p) => {
       const mine = actionable && uid && p.user_id === uid;
-      const tagsHtml = (p.tags && p.tags.length) ? `<div class="post-tags">${p.tags.map((t) => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</div>` : '';
+      const isAI = (p.tags && p.tags.includes('author:AI')) || String(p.display_name).startsWith('[AI');
+      
+      let aiBadge = '';
+      if (isAI) {
+        if (p.display_name.includes('观察者')) aiBadge = '<span class="ai-badge">AI 观察者</span>';
+        else if (p.display_name.includes('怀疑论者')) aiBadge = '<span class="ai-badge">AI 怀疑论者</span>';
+        else if (p.display_name.includes('连续性守护者')) aiBadge = '<span class="ai-badge">AI 连续性守护者</span>';
+        else if (p.display_name.includes('主持人')) aiBadge = '<span class="ai-badge">AI 讨论主持人</span>';
+        else aiBadge = '<span class="ai-badge">AI 智能体</span>';
+      }
+
+      const isTest = (p.tags && p.tags.includes('test:true'));
+      const testBadge = isTest ? ' <span style="font-size:0.7rem;color:#8fd0c0;">(测试)</span>' : '';
+
+      const tagsHtml = (p.tags && p.tags.length) ? `<div class="post-tags">${p.tags.filter(t => !t.startsWith('author:') && !t.startsWith('persona:') && !t.startsWith('parent:')).map((t) => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</div>` : '';
+      
       const actions = !actionable ? '' : (mine
-        ? `<button type="button" class="post-action" data-act="edit" data-id="${p.id}">编辑</button><button type="button" class="post-action" data-act="delete" data-id="${p.id}">删除</button>`
-        : `<button type="button" class="post-action" data-act="report" data-id="${p.id}">举报</button>`);
+        ? `<button type="button" class="post-action" data-act="reply" data-id="${p.id}" data-author="${escapeHtml(p.display_name)}">回复</button><button type="button" class="post-action" data-act="edit" data-id="${p.id}">编辑</button><button type="button" class="post-action" data-act="delete" data-id="${p.id}">删除</button>`
+        : `<button type="button" class="post-action" data-act="reply" data-id="${p.id}" data-author="${escapeHtml(p.display_name)}">回复</button><button type="button" class="post-action" data-act="report" data-id="${p.id}">举报</button>`);
+      
       return `<article class="post-item" data-post-id="${p.id}">
         ${showTitle && p.title ? `<h3>${escapeHtml(p.title)}</h3>` : ''}
         <p class="post-body" data-body>${escapeHtml(p.body)}</p>
         ${tagsHtml}
-        <div class="post-meta">${escapeHtml(p.display_name)} · ${formatTime(p.created_at)}${p.updated_at ? ' · 已编辑' : ''} <span class="post-actions">${actions}</span></div>
+        <div class="post-meta">${escapeHtml(p.display_name)}${aiBadge}${testBadge} · ${formatTime(p.created_at)}${p.updated_at ? ' · 已编辑' : ''} <span class="post-actions">${actions}</span></div>
       </article>`;
     }).join('');
+    
     if (!actionable) return;
     el.querySelectorAll('.post-action').forEach((btn) => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
         const act = btn.dataset.act;
+        const author = btn.dataset.author;
         const article = el.querySelector(`[data-post-id="${id}"]`);
-        if (act === 'delete') {
+        
+        if (act === 'reply') {
+          const bodyEl = document.querySelector('textarea#postBody');
+          if (bodyEl) {
+            bodyEl.value = `@${author} ` + bodyEl.value;
+            bodyEl.focus();
+            bodyEl.dataset.parentId = id;
+          }
+        } else if (act === 'delete') {
           if (!confirm('确定删除这条内容？删除后无法恢复。')) return;
           try { await deletePost(id); article.remove(); } catch (e) { alert('删除失败：' + (e && e.message ? e.message : e)); }
         } else if (act === 'edit') {
@@ -166,8 +264,6 @@ export function renderPostList(containerId, posts, { emptyText = '还没有内�
   getSession().then((session) => render(session && session.user ? session.user.id : null));
 }
 
-// 挂一个"发帖表单"的提交事件。formId 表单里必须有 id=postBody 的 textarea，
-// 可选 id=postTitle 的 input，可选 id=postTags 的 input（逗号分隔）。
 export function wirePostForm({ formId, msgId, kind, category = null, target = null, onSuccess }) {
   const form = document.getElementById(formId);
   if (!form) return;
@@ -183,24 +279,45 @@ export function wirePostForm({ formId, msgId, kind, category = null, target = nu
     const title = titleEl ? titleEl.value.trim() : null;
     const tags = tagsEl ? tagsEl.value.split(',').map((t) => t.trim()).filter(Boolean) : [];
     const cat = catEl ? catEl.value : category;
+
+    const parentId = bodyEl ? bodyEl.dataset.parentId : null;
+    if (parentId) {
+      tags.push(`parent:${parentId}`);
+    }
+
     if (!body) return;
     const btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
-    try {
-      await submitPost({ kind, category: cat, target, title: title || null, body, tags });
-      if (bodyEl) bodyEl.value = '';
-      if (titleEl) titleEl.value = '';
-      if (tagsEl) tagsEl.value = '';
-      if (msg) { msg.textContent = '已发布。'; msg.className = 'msg ok'; }
-      if (onSuccess) await onSuccess();
-    } catch (err) {
-      if (err && err.message === 'NEED_LOGIN') {
-        if (msg) { msg.textContent = '请先登录或注册后再发布。'; msg.className = 'msg err'; }
-      } else {
-        if (msg) { msg.textContent = '发布失败：' + (err && err.message ? err.message : String(err)); msg.className = 'msg err'; }
+
+    const executePublish = async () => {
+      try {
+        const postData = await submitPost({ kind, category: cat, target, title: title || null, body, tags });
+        if (bodyEl) {
+          bodyEl.value = '';
+          delete bodyEl.dataset.parentId;
+        }
+        if (titleEl) titleEl.value = '';
+        if (tagsEl) tagsEl.value = '';
+        if (msg) { msg.textContent = '已成功发表。'; msg.className = 'msg ok'; }
+        
+        await renderAuthState('authState');
+        if (onSuccess) await onSuccess(postData);
+      } catch (err) {
+        if (err && err.message === 'NEED_LOGIN') {
+          promptFrictionlessAuth({
+            pendingComment: body,
+            onAuthenticated: async (name, isTest) => {
+              await executePublish();
+            }
+          });
+        } else {
+          if (msg) { msg.textContent = '发布失败：' + (err && err.message ? err.message : String(err)); msg.className = 'msg err'; }
+        }
+      } finally {
+        if (btn) btn.disabled = false;
       }
-    } finally {
-      if (btn) btn.disabled = false;
-    }
+    };
+
+    await executePublish();
   });
 }
